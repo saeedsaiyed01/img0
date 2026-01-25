@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# img0.site
 
-## Getting Started
+A privacy-first, offline-capable image utility hub. All processing happens in your browser.
 
-First, run the development server:
+## Features
+
+- **Privacy First:** No server uploads.
+- **Offline Capable:** Works without internet.
+- **Tools:**
+  - **Image to Base64:** Convert images to Base64 strings.
+  - **Image Conversion:** Convert to PNG, JPG, WebP, ICO.
+  - **PDF Generator:** Convert images to A4 PDF documents.
+  - **Favicon Generator:** Create full favicon packages.
+  - **SVG to JSX:** Convert SVGs to React components.
+  - **Image Editor:** Crop and rotate images.
+
+## Architecture
+
+- **Framework:** Next.js 15 (App Router)
+- **Styling:** Tailwind CSS v4
+- **Registry Pattern:** Tools are defined in `src/config/tools.ts` and rendered dynamically via `src/app/tools/[tool]/page.tsx`.
+- **Engines:** Reusable components in `src/components/tools/` power multiple tools (e.g., `FormatConverter`).
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
