@@ -1,0 +1,21 @@
+{
+    "name": "img0.site - Privacy First Tools",
+    "short_name": "img0",
+    "description": "Offline-capable, privacy-first image utilities. Convert, resize, and edit images entirely in your browser.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "icons": [
+        {
+            "src": "/insert-picture-icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/insert-picture-icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
