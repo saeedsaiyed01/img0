@@ -1,6 +1,7 @@
 "use client";
 
 import { Cpu, Globe, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export function Footer() {
@@ -14,8 +15,13 @@ export function Footer() {
           {/* Brand Info */}
           <div className="col-span-1 md:col-span-1 space-y-6">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold text-xs">
-                0
+              <div className="w-9 h-9 bg-white border border-slate-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform relative overflow-hidden">
+                <Image 
+                  src="/insert-picture-icon.png" 
+                  alt="IMG0" 
+                  fill
+                  className="object-contain p-1.5" 
+                />  
               </div>
               <span className="font-bold text-xl tracking-tighter text-slate-900 uppercase">
                 img0.site

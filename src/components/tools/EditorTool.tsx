@@ -17,6 +17,7 @@ import {
   ZoomIn,
   ZoomOut
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useRef, useState } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import { toast } from "sonner";
@@ -169,50 +170,55 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
             <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                  <h2 className="text-lg font-bold text-slate-900">Editor Tools</h2>
-                 <button
+                 <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setImageSrc(null)}
                     className="text-xs font-semibold text-red-500 hover:text-red-600 bg-red-50 px-3 py-1.5 rounded-lg transition-colors"
                   >
                     Close
-                  </button>
+                  </motion.button>
               </div>
 
             {/* Transform Tools */}
             <div className="space-y-4">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Transform</h3>
               <div className="grid grid-cols-2 gap-3">
-                 <button
+                 <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={handleRotate}
                     className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white hover:border-slate-300 transition-all text-slate-700 shadow-sm"
                     title="Rotate 90°"
                  >
                     <RotateCw className="size-6 mb-2 text-blue-600" />
                     <span className="text-xs font-bold">Rotate</span>
-                 </button>
-                 <button
+                 </motion.button>
+                 <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={handleReset}
                     className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white hover:border-slate-300 transition-all text-slate-700 shadow-sm"
                     title="Reset All"
                  >
                     <RefreshCw className="size-6 mb-2 text-red-500" />
                     <span className="text-xs font-bold">Reset</span>
-                 </button>
-                 <button
+                 </motion.button>
+                 <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={handleFlipHorizontal}
                     className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white hover:border-slate-300 transition-all text-slate-700 shadow-sm"
                     title="Flip Horizontal"
                  >
                     <ArrowLeftRight className="size-6 mb-2 text-slate-500" />
                     <span className="text-xs font-bold">Flip X</span>
-                 </button>
-                 <button
+                 </motion.button>
+                 <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={handleFlipVertical}
                     className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white hover:border-slate-300 transition-all text-slate-700 shadow-sm"
                     title="Flip Vertical"
                  >
                     <ArrowUpDown className="size-6 mb-2 text-slate-500" />
                     <span className="text-xs font-bold">Flip Y</span>
-                 </button>
+                 </motion.button>
               </div>
             </div>
 
@@ -221,18 +227,26 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
               <div className="space-y-4">
                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Aspect Ratio</h3>
                  <div className="grid grid-cols-2 gap-2">
-                    <button onClick={() => handleAspectRatio(undefined)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                    <motion.button 
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleAspectRatio(undefined)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Maximize className="size-3.5" /> Freeform
-                    </button>
-                    <button onClick={() => handleAspectRatio(1)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                    </motion.button>
+                    <motion.button 
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleAspectRatio(1)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Square className="size-3.5" /> Square (1:1)
-                    </button>
-                    <button onClick={() => handleAspectRatio(16/9)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                    </motion.button>
+                    <motion.button 
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleAspectRatio(16/9)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Monitor className="size-3.5" /> 16:9
-                    </button>
-                    <button onClick={() => handleAspectRatio(4/3)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                    </motion.button>
+                    <motion.button 
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleAspectRatio(4/3)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Crop className="size-3.5" /> 4:3
-                    </button>
+                    </motion.button>
                  </div>
               </div>
             )}
@@ -241,26 +255,29 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
             <div className="space-y-4">
                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Zoom</h3>
                  <div className="flex items-center gap-2">
-                    <button
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => handleZoom(-0.1)}
                         className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
                     >
                         <ZoomOut className="size-5 text-slate-600" />
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => handleZoom(0.1)}
                         className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
                     >
                         <ZoomIn className="size-5 text-slate-600" />
-                    </button>
+                    </motion.button>
                  </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100">
-                <button
+            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                <motion.button
+                whileTap={{ scale: 0.95 }}
                 onClick={handleDownload}
                 disabled={processing}
-                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-base hover:bg-slate-800 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                 {processing ? (
                     <>
@@ -273,7 +290,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
                     Download Edited
                     </>
                 )}
-                </button>
+                </motion.button>
             </div>
           </div>
           </div>

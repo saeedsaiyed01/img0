@@ -10,12 +10,12 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 font-sans">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between max-w-6xl">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold text-xs ring-4 ring-slate-100 group-hover:scale-110 transition-transform relative overflow-hidden">
+          <div className="w-9 h-9 bg-white border border-slate-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform relative overflow-hidden">
             <Image 
               src="/insert-picture-icon.png" 
-              alt="Insert Picture Icon" 
+              alt="IMG0" 
               fill
-              className="bg-white object-cover" 
+              className="object-contain p-1.5" 
             />  
           </div>
           <span className="font-bold text-xl tracking-tighter text-slate-900 uppercase">

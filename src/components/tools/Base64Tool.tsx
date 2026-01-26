@@ -2,6 +2,7 @@
 
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { Check, Copy, FileText } from "lucide-react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -62,6 +63,16 @@ export function Base64Tool() {
                             >
                                 {copied ? <Check className="size-4 text-emerald-400" /> : <Copy className="size-4" />}
                             </button>
+                         </div>
+                         <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                            <motion.button
+                                whileTap={{ scale: 0.95 }}
+                                onClick={copyToClipboard}
+                                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg"
+                            >
+                                {copied ? <Check className="size-5 text-emerald-400" /> : <Copy className="size-5" />}
+                                {copied ? "Copied!" : "Copy Base64"}
+                            </motion.button>
                          </div>
                          
                          <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-800 leading-relaxed">

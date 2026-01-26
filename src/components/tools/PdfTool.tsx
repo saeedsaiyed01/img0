@@ -4,6 +4,7 @@ import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import { ArrowDown, ArrowUp, Download, FileText, Loader2, Trash2 } from "lucide-react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -128,12 +129,13 @@ export default function PdfTool() {
           <div className="lg:col-span-2 space-y-4">
             <h3 className="text-sm font-bold text-slate-600 uppercase flex items-center justify-between">
               <span>Pages ({images.length})</span>
-              <button 
+              <motion.button 
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setImages([])} 
                 className="text-red-500 hover:text-red-700 text-xs normal-case"
               >
                 Clear All
-              </button>
+              </motion.button>
             </h3>
             
             <div className="space-y-3">
@@ -154,27 +156,30 @@ export default function PdfTool() {
                   </div>
 
                   <div className="flex items-center gap-1">
-                    <button
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => moveImage(index, "up")}
                       disabled={index === 0}
                       className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-30"
                     >
                       <ArrowUp className="size-4" />
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => moveImage(index, "down")}
                       disabled={index === images.length - 1}
                       className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-30"
                     >
                       <ArrowDown className="size-4" />
-                    </button>
+                    </motion.button>
                     <div className="w-px h-6 bg-slate-200 mx-1" />
-                    <button
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => removeImage(img.id)}
                       className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                     >
                       <Trash2 className="size-4" />
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
               ))}
@@ -200,7 +205,8 @@ export default function PdfTool() {
                     Page Size
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    <button
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => setPageSize("fit")}
                       className={cn(
                         "px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all",
@@ -210,8 +216,9 @@ export default function PdfTool() {
                       )}
                     >
                       Fit Image
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => setPageSize("a4")}
                       className={cn(
                         "px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all",
@@ -221,7 +228,7 @@ export default function PdfTool() {
                       )}
                     >
                       A4 Page
-                    </button>
+                    </motion.button>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
                     "Fit Image" creates a page exactly the size of each image (no whitespace). "A4" centers images on standard pages.
@@ -229,18 +236,21 @@ export default function PdfTool() {
                 </div>
               </div>
 
-              <button
-                onClick={generatePDF}
-                disabled={isProcessing}
-                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isProcessing ? (
-                  <Loader2 className="size-5 animate-spin" />
-                ) : (
-                  <Download className="size-5" />
-                )}
-                <span>Download PDF</span>
-              </button>
+              <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={generatePDF}
+                    disabled={isProcessing}
+                    className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {isProcessing ? (
+                    <Loader2 className="size-5 animate-spin" />
+                    ) : (
+                    <Download className="size-5" />
+                    )}
+                    <span>Download PDF</span>
+                </motion.button>
+              </div>
             </div>
           </div>
         </div>

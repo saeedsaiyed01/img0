@@ -3,6 +3,7 @@
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { saveAs } from "file-saver";
 import { Download, Image as ImageIcon, LayoutGrid, LayoutList, Loader2, Minus } from "lucide-react";
+import { motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -181,18 +182,20 @@ export function JoinImagesTool() {
             <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-8 sticky top-8">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                  <h4 className="font-bold text-slate-900 text-lg">Configuration</h4>
-                 <button 
+                  <motion.button 
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setFiles([])}
                     className="text-xs font-bold text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors"
-                 >
+                  >
                     Reset
-                 </button>
+                  </motion.button>
               </div>
 
               <div className="space-y-4">
                 <label className="text-sm font-semibold text-slate-700 uppercase tracking-wider">Layout Direction</label>
                 <div className="grid grid-cols-3 gap-3">
-                  <button
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setDirection("horizontal")}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
                       direction === "horizontal"
@@ -202,8 +205,9 @@ export function JoinImagesTool() {
                   >
                     <Minus className="size-6 mb-2" />
                     <span className="text-[10px] font-bold uppercase">Row</span>
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setDirection("vertical")}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
                       direction === "vertical"
@@ -213,8 +217,9 @@ export function JoinImagesTool() {
                   >
                     <LayoutList className="size-6 mb-2" />
                     <span className="text-[10px] font-bold uppercase">Column</span>
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setDirection("grid")}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
                       direction === "grid"
@@ -224,7 +229,7 @@ export function JoinImagesTool() {
                   >
                     <LayoutGrid className="size-6 mb-2" />
                     <span className="text-[10px] font-bold uppercase">Grid</span>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
@@ -262,11 +267,12 @@ export function JoinImagesTool() {
                 </div>
               )}
             
-            <div className="pt-4 border-t border-slate-100">
-               <button
+            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+               <motion.button
+                whileTap={{ scale: 0.95 }}
                 onClick={handleDownload}
                 disabled={!joinedImageUrl || isProcessing}
-                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-base hover:bg-slate-800 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
                    <>
@@ -279,7 +285,7 @@ export function JoinImagesTool() {
                     Download Merged
                    </>
                 )}
-              </button>
+              </motion.button>
             </div>
 
             </div>

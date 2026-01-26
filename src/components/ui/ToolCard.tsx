@@ -24,7 +24,7 @@ export function ToolCard({ title, description, href, category, icon, index }: To
     <Link href={href} className="flex h-full">
       <motion.div
         whileHover={{ y: -8 }}
-        whileTap={{ scale: 0.98 }}
+        whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         className={cn(
           "group relative flex flex-col w-full p-8 bg-white border border-slate-100 rounded-[32px] transition-all duration-300 font-sans",

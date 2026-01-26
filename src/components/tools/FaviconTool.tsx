@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import { Archive, LayoutGrid, Loader2 } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -134,23 +135,26 @@ export default function FaviconTool() {
                 </div>
             </div>
 
-            <button
-                onClick={generatePackage}
-                disabled={!file || isProcessing}
-                className={cn(
-                    "w-full h-14 text-base font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5",
-                    file 
-                        ? "bg-slate-900 text-white hover:bg-slate-800"
-                        : "bg-slate-100 text-slate-400 cursor-not-allowed"
-                )}
-            >
-                 {isProcessing ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                    <Archive className="w-5 h-5" />
-                )}
-                {isProcessing ? "Bundling..." : "Download ZIP Package"}
-            </button>
+            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={generatePackage}
+                    disabled={!file || isProcessing}
+                    className={cn(
+                        "w-full h-14 text-base font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm",
+                        file 
+                            ? "bg-slate-900 text-white hover:bg-slate-800"
+                            : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                    )}
+                >
+                     {isProcessing ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                        <Archive className="w-5 h-5" />
+                    )}
+                    {isProcessing ? "Bundling..." : "Download ZIP Package"}
+                </motion.button>
+            </div>
         </div>
       </div>
     </div>

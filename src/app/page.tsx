@@ -16,12 +16,12 @@ export default function LandingPage() {
     <div className="bg-white font-sans">
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-32 md:pt-48 md:pb-32 px-4">
+      <section className="relative pt-16 pb-16 md:pt-48 md:pb-32 px-4">
         {/* Subtle Tech Pattern */}
         <div className="absolute inset-0 -z-10 opacity-[0.03] pointer-events-none" 
              style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
         
-        <div className="container mx-auto max-w-6xl text-center space-y-12 mt-[-150px]">
+        <div className="container mx-auto max-w-6xl text-center space-y-8 md:space-y-12 mt-4 md:mt-[-150px]">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -40,7 +40,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.6 }}
-              className="text-6xl md:text-8xl  font-semibold tracking-[-0.05em] leading-[0.9]"
+              className="text-4xl md:text-8xl  font-semibold tracking-[-0.05em] leading-[0.9]"
             >
               Instant Image Tools.
             </motion.h1>
@@ -51,7 +51,7 @@ export default function LandingPage() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="flex justify-center mt-4"
             >
-              <span className="relative inline-block px-6 md:px-6 py-1 md:py-3 text-6xl md:text-8xl font-semibold tracking-[-0.05em] leading-[0.9] text-slate-900 whitespace-nowrap">
+              <span className="relative inline-block px-6 md:px-6 py-1 md:py-3 text-4xl md:text-8xl font-semibold tracking-[-0.05em] leading-[0.9] text-slate-900 whitespace-nowrap">
 
                 Purely Local.
               </span>
@@ -77,7 +77,7 @@ export default function LandingPage() {
             <Link href="/tools">
               <motion.button 
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.95 }}
                 className="group relative inline-flex h-16 items-center justify-center overflow-hidden rounded-full bg-slate-900 px-10 py-5 font-semibold text-white transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
               >
                 <span className="relative z-10 flex items-center gap-2 text-lg">
@@ -91,7 +91,7 @@ export default function LandingPage() {
       </section>
 
       {/* Featured Bento Grid */}
-      <section className="py-32 px-4">
+      <section className="py-16 md:py-32 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div 
             {...presenceAnimations}
@@ -128,7 +128,7 @@ export default function LandingPage() {
                 </div>
                 <Link href="/tools/remove-background">
                   <motion.button 
-                    whileTap={{ scale: 0.98 }}
+                    whileTap={{ scale: 0.95 }}
                     className="inline-flex items-center text-slate-900 font-bold text-lg group-hover:gap-3 transition-all"
                   >
                     Launch Tool <ArrowRight className="w-5 h-5 ml-2" />
@@ -147,7 +147,7 @@ export default function LandingPage() {
                 initial: { opacity: 0, y: 20 },
                 whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
               }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.95 }}
               className="group relative overflow-hidden rounded-[32px] border border-slate-100 bg-slate-50 p-8 hover:bg-white hover:border-slate-200 transition-all shadow-sm hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.1)]"
             >
               <div className="flex flex-col h-full">
@@ -170,7 +170,7 @@ export default function LandingPage() {
                 initial: { opacity: 0, y: 20 },
                 whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
               }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.95 }}
               className="group relative overflow-hidden rounded-[32px] border border-slate-100 bg-slate-900 p-8 transition-all hover:scale-[1.02] hover:border-slate-800 hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.3)]"
             >
               <div className="flex flex-col h-full text-white">
@@ -191,7 +191,7 @@ export default function LandingPage() {
       </section>
 
       {/* Privacy Checklist */}
-      <section className="py-32 px-4 bg-white">
+      <section className="py-16 md:py-32 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <motion.div {...presenceAnimations} className="space-y-4">
@@ -233,7 +233,7 @@ export default function LandingPage() {
       {/* Local-Only Visualizer */}
       <motion.section 
         {...presenceAnimations}
-        className="py-32 px-4 bg-slate-50 border-y border-slate-100"
+        className="py-16 md:py-32 px-4 bg-slate-50 border-y border-slate-100"
       >
         <div className="container mx-auto max-w-4xl">
           <div className="relative p-12 md:p-20 rounded-[40px] border-2 border-dashed border-slate-100 bg-white shadow-sm overflow-hidden text-center space-y-12">
@@ -305,10 +305,9 @@ export default function LandingPage() {
       </motion.section>
 
 
-      {/* Bottom CTA */}
       <motion.section 
         {...presenceAnimations}
-        className="py-32 px-4 border-t border-slate-100"
+        className="py-16 md:py-32 px-4 border-t border-slate-100"
       >
         <div className="container mx-auto max-w-4xl text-center space-y-8">
           <h2 className="text-5xl md:text-7xl font-bold tracking-tighter">Tools without the telemetry.</h2>
@@ -319,7 +318,7 @@ export default function LandingPage() {
             <Link href="/tools">
               <motion.button 
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.95 }}
                 className="bg-slate-900 text-white px-12 py-5 rounded-full font-bold text-xl shadow-2xl shadow-slate-900/40"
               >
                 Get Started Now

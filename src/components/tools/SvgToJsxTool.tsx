@@ -2,6 +2,7 @@
 
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { Check, Copy, FileCode } from "lucide-react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -123,13 +124,16 @@ export function SvgToJsxTool() {
                             <pre className="w-full h-[400px] p-4 font-mono text-[10px] bg-slate-900 text-teal-400 rounded-xl overflow-auto border border-slate-800 shadow-inner custom-scrollbar">
                                 {jsxCode}
                             </pre>
-                             <button
+                         </div>
+                         <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                            <motion.button
+                                whileTap={{ scale: 0.95 }}
                                 onClick={copyToClipboard}
-                                className="absolute top-2 right-2 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm transition-all shadow-sm"
-                                title="Copy to clipboard"
+                                className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg"
                             >
-                                {copied ? <Check className="size-4 text-emerald-400" /> : <Copy className="size-4" />}
-                            </button>
+                                {copied ? <Check className="size-5 text-emerald-400" /> : <Copy className="size-5" />}
+                                {copied ? "Copied!" : "Copy JSX"}
+                            </motion.button>
                          </div>
                          
                          <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-800 leading-relaxed">

@@ -4,6 +4,7 @@ import { FileDropzone } from "@/components/ui/FileDropzone";
 import { removeBackground } from "@imgly/background-removal";
 import { saveAs } from "file-saver";
 import { Download, Loader2, RefreshCw } from "lucide-react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -160,26 +161,30 @@ export function BlurBackgroundTool() {
                     />
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 space-y-3">
-                     <button
-                        onClick={handleDownload}
-                        disabled={!processedImageUrl || isProcessing}
-                        className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                        {isProcessing ? <Loader2 className="size-5 animate-spin"/> : <Download className="size-5" />}
-                        Download PNG
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            setOriginalFile(null);
-                            setProcessedImageUrl(null);
-                        }}
-                        className="w-full h-12 bg-white border-2 border-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-200 transition-colors flex items-center justify-center gap-2"
-                        >
-                        <RefreshCw className="size-4" />
-                        Reset Algorithm
-                    </button>
+                <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                    <div className="flex flex-col gap-3 lg:space-y-3">
+                         <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={handleDownload}
+                            disabled={!processedImageUrl || isProcessing}
+                            className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                            {isProcessing ? <Loader2 className="size-5 animate-spin"/> : <Download className="size-5" />}
+                            Download PNG
+                        </motion.button>
+    
+                        <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                                setOriginalFile(null);
+                                setProcessedImageUrl(null);
+                            }}
+                            className="w-full h-12 bg-white border-2 border-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-200 transition-colors flex items-center justify-center gap-2"
+                            >
+                            <RefreshCw className="size-4" />
+                            Reset Algorithm
+                        </motion.button>
+                    </div>
                 </div>
             </div>
             </div>

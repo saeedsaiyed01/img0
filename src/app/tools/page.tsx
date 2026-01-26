@@ -40,7 +40,7 @@ export default function ToolsPage() {
         </div>
 
         {/* Search Bar */}
-        <div className="max-w-md mx-auto relative group">
+        <div className="w-full md:max-w-md mx-auto relative group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <Search className="w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
           </div>
@@ -49,7 +49,7 @@ export default function ToolsPage() {
             placeholder="Search tools..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 placeholder:font-mono focus:outline-hidden focus:ring-2 focus:ring-slate-200 focus:bg-white transition-all"
+            className="w-full h-12 md:h-auto bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 placeholder:font-mono focus:outline-hidden focus:ring-2 focus:ring-slate-200 focus:bg-white transition-all"
           />
         </div>
       </motion.section>
@@ -61,7 +61,8 @@ export default function ToolsPage() {
             <motion.div
               key={tool.id}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.05, duration: 0.5 }}
             >
               <ToolCard
@@ -90,7 +91,7 @@ export default function ToolsPage() {
             <p className="text-slate-500">We couldn't find any tool matching "{searchQuery}"</p>
           </div>
           <motion.button 
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.95 }}
             className="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:shadow-lg transition-all"
           >
             Request a Tool
