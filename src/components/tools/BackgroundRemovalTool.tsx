@@ -46,7 +46,7 @@ export function BackgroundRemovalTool() {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans">
       {!originalFile ? (
         <FileDropzone
           onFileSelect={handleFileSelect}
@@ -61,14 +61,12 @@ export function BackgroundRemovalTool() {
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-300">
-          {/* Workspace (Left - 66%) */}
           <div className="lg:col-span-2 space-y-6">
              {/* Comparison View */}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <span className="text-xs font-semibold text-slate-500 uppercase">Original</span>
                     <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm aspect-square relative">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                         src={URL.createObjectURL(originalFile)}
                         alt="Original"
@@ -100,7 +98,6 @@ export function BackgroundRemovalTool() {
                                 <p className="text-xs text-red-600 mt-1">{error}</p>
                              </div>
                         ) : processedImageUrl && (
-                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 src={processedImageUrl}
                                 alt="Processed"
@@ -112,7 +109,7 @@ export function BackgroundRemovalTool() {
              </div>
           </div>
 
-          {/* Control Panel (Right - 33%) */}
+          {/* Control Panel */}
           <div className="space-y-6">
             <div className="space-y-2 sticky top-8">
                <span className="text-xs font-semibold text-slate-500 uppercase">Controls</span>

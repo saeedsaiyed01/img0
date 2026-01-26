@@ -60,7 +60,7 @@ export default function PdfTool() {
       const doc = new jsPDF({
         orientation: "p",
         unit: "mm",
-        format: "a4", // Initial format, will change per page if "fit" is selected
+        format: "a4", 
       });
 
       // Remove default first page
@@ -112,7 +112,7 @@ export default function PdfTool() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="w-full max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500 font-sans">
       <FileDropzone
         onFilesSelect={handleFilesSelect}
         multiple={true}
@@ -140,7 +140,7 @@ export default function PdfTool() {
               {images.map((img, index) => (
                 <div key={img.id} className="flex items-center gap-4 p-3 bg-white border border-slate-200 rounded-xl shadow-sm group hover:border-blue-300 transition-colors">
                   <div className="size-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 border border-slate-100">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+        
                     <img src={img.preview} alt="" className="size-full object-cover" />
                   </div>
                   

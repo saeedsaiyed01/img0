@@ -127,7 +127,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
   const showRotate = mode === "rotate" || mode === "both";
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto font-sans">
       {!imageSrc ? (
         <FileDropzone
           onFileSelect={handleFile}
@@ -164,7 +164,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
             </div>
           </div>
 
-          {/* Sidebar Controls (Control Panel - 33%) */}
+          {/* Sidebar Controls */}
           <div className="space-y-6">
             <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">

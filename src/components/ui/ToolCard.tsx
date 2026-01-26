@@ -1,6 +1,9 @@
+"use client";
+
 import { CATEGORY_THEMES, ToolCategory } from "@/config/tools";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -18,49 +21,52 @@ export function ToolCard({ title, description, href, category, icon, index }: To
   const theme = CATEGORY_THEMES[category] || CATEGORY_THEMES.encode;
 
   return (
-    <Link
-      href={href}
-      className={cn(
-        "group relative flex flex-col justify-between h-full p-6",
-        "bg-white",
-        "border border-slate-200",
-        "rounded-2xl", 
-        "shadow-sm",
-        "transition-all duration-300 ease-out",
-        "hover:shadow-md hover:-translate-y-1", // Lift off effect
-        "hover:border-slate-300"
-      )}
-    >
-      {/* Header with Icon and Arrow */}
-      <div className="flex justify-between items-start mb-4">
-        <div className={cn(
-            "p-3 rounded-xl", // Squircle shape
-            theme.icon
-        )}>
-           <div className="w-6 h-6 [&>svg]:w-full [&>svg]:h-full">
-             {icon}
-           </div>
+    <Link href={href} className="flex h-full">
+      <motion.div
+        whileHover={{ y: -8 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className={cn(
+          "group relative flex flex-col w-full p-8 bg-white border border-slate-100 rounded-[32px] transition-all duration-300 font-sans",
+          "hover:border-slate-200 hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.1)]"
+        )}
+      >
+        {/* Header with Icon */}
+        <div className="flex justify-between items-start mb-8">
+          <div className={cn(
+            "w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-500",
+            theme.icon || "bg-slate-50 text-slate-900"
+          )}>
+            <div className="w-7 h-7 [&>svg]:w-full [&>svg]:h-full">
+              {icon}
+            </div>
+          </div>
+          
+          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300 group-hover:text-slate-900 transition-colors">
+            {category.substring(0,3)}-{String(index + 1).padStart(2, '0')}
+          </div>
         </div>
-        
-        <ArrowUpRight className="w-5 h-5 text-slate-300 group-hover:text-slate-500 transition-colors" />
-      </div>
 
-      {/* Content */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-start">
-             <h3 className="text-[17px] font-semibold text-[#1a1a1a] tracking-tight group-hover:text-black transition-colors">
-                {title}
-            </h3>
-            {/* Technical ID for "UI Density" look */}
-            <span className="font-mono text-[10px] uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                {category.substring(0,3).toUpperCase()}-0{(index % 9) + 1}
-            </span>
+        {/* Content */}
+        <div className="flex-1 space-y-4">
+          <h3 className="text-2xl font-bold tracking-tight text-slate-900 leading-tight">
+            {title}
+          </h3>
+          <p className="text-slate-500 leading-relaxed font-medium">
+            {description}
+          </p>
         </div>
-        
-        <p className="text-[14px] text-[#666666] leading-snug font-normal">
-          {description}
-        </p>
-      </div>
+
+        {/* Footer */}
+        <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-between">
+          <span className="text-sm font-bold uppercase tracking-widest text-slate-900 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+            Launch Tool
+          </span>
+          <div className="w-10 h-10 rounded-full bg-slate-50 group-hover:bg-slate-900 flex items-center justify-center transition-colors">
+            <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+          </div>
+        </div>
+      </motion.div>
     </Link>
   );
 }

@@ -24,11 +24,8 @@ export function BlurBackgroundTool() {
 
     try {
       const imageUrl = URL.createObjectURL(file);
-      
-      // Get the foreground (alpha mask)
       const foregroundBlob = await removeBackground(imageUrl);
       
-      // Create canvas to compose images
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas not supported");
@@ -90,7 +87,7 @@ export function BlurBackgroundTool() {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans">
       {!originalFile ? (
         <FileDropzone
           onFileSelect={handleFileSelect}
@@ -100,13 +97,13 @@ export function BlurBackgroundTool() {
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-300">
-          {/* Workspace (Left - 66%) */}
+   
           <div className="lg:col-span-2 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div className="space-y-2">
                     <span className="text-xs font-bold text-slate-400 uppercase">Original</span>
                     <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm aspect-square relative">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
+          
                         <img
                         src={URL.createObjectURL(originalFile)}
                         alt="Original"
@@ -124,7 +121,6 @@ export function BlurBackgroundTool() {
                             <p className="text-sm font-bold text-slate-800">Blurring...</p>
                         </div>
                         ) : processedImageUrl && (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={processedImageUrl}
                             alt="Processed"

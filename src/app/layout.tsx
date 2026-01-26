@@ -29,24 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="antialiased">
+    <html lang="en" className={`antialiased ${geistSans.variable} ${geistMono.variable}`}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col bg-white text-[#1a1a1a] font-sans antialiased relative overflow-x-hidden selection:bg-black selection:text-white`}
+        className={`bg-white text-slate-900 antialiased selection:bg-slate-900 selection:text-white overflow-x-hidden`}
       >
-        {/* Indigo Corner Deep Background */}
-        <div
-          className="fixed inset-0 z-0 pointer-events-none"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle 600px at 0% 200px, #f3f5ffff, transparent),
-              radial-gradient(circle 600px at 100% 200px, #f3f5ffff, transparent)
-            `,
-          }}
-        />
-        
-        <div className="relative z-10 flex flex-col flex-1">
+        <div className="flex flex-col min-h-screen">
           <Navbar />
-          <main className="flex-1 w-full mx-auto max-w-6xl px-4 py-8">
+          <main className="flex-1 w-full">
             {children}
           </main>
           <Footer />

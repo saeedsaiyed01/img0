@@ -52,9 +52,6 @@ function convertSvgToJsx(svgString: string): string {
     jsx = jsx.replace(regex, `${jsxAttr}=`);
   }
 
-  // Remove xmlns attributes (optional, keeps JSX cleaner)
-  // jsx = jsx.replace(/\s*xmlns="[^"]*"/g, "");
-
   // Convert style strings to objects (basic conversion)
   jsx = jsx.replace(
     /style="([^"]*)"/g,
@@ -78,14 +75,12 @@ function convertSvgToJsx(svgString: string): string {
 export function SvgToJsxTool() {
   const [jsxCode, setJsxCode] = useState("");
   const [copied, setCopied] = useState(false);
-  const [fileName, setFileName] = useState("");
 
   const handleFileSelect = async (file: File) => {
     try {
       const text = await file.text();
       const converted = convertSvgToJsx(text);
       setJsxCode(converted);
-      setFileName(file.name);
       setCopied(false);
     } catch (error) {
       console.error(error);
@@ -101,7 +96,7 @@ export function SvgToJsxTool() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8">
+    <div className="w-full max-w-7xl mx-auto space-y-8 font-sans">
        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          {/* Workspace (Left - 66%) */}
          <div className="lg:col-span-2 space-y-4">

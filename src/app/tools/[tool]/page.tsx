@@ -13,7 +13,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 // Component registry mapping string names to actual components
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   Base64Tool,
   FormatConverter,
@@ -70,12 +69,12 @@ export default async function ToolPage(props: { params: Promise<{ tool: string }
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-500 pt-8">
+    <div className="max-w-6xl mx-auto px-4 pb-32 pt-16 space-y-12 animate-in fade-in duration-500 font-sans">
        {/* Navigation / Header */}
        <div className="space-y-8">
           <Link
             href="/"
-            className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors group"
+            className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors group"
           >
             <ArrowLeft className="size-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Tools
@@ -88,7 +87,7 @@ export default async function ToolPage(props: { params: Promise<{ tool: string }
                          <div className="p-3 bg-white border border-slate-100 rounded-2xl shadow-sm">
                             <toolConfig.icon className="size-8 text-blue-600" strokeWidth={1.5} />
                          </div>
-                         <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+                         <h1 className="text-4xl font-black tracking-[-0.05em] text-slate-900">
                            {toolConfig.title}
                          </h1>
                     </div>
@@ -119,7 +118,6 @@ export default async function ToolPage(props: { params: Promise<{ tool: string }
        </div>
 
       <div className="min-h-[400px]">
-        {/* Render tool component with its props */}
         <ToolComponent {...(toolConfig.props || {})} />
       </div>
     </div>

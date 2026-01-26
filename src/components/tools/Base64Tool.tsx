@@ -28,9 +28,9 @@ export function Base64Tool() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8">
+    <div className="w-full max-w-7xl mx-auto space-y-8 font-sans">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Workspace (Left Column - 66%) */}
+          {/* Workspace */}
           <div className="lg:col-span-2 space-y-4">
             <FileDropzone 
                 onFileSelect={handleFile} 
@@ -41,7 +41,7 @@ export function Base64Tool() {
             />
           </div>
 
-          {/* Control Panel (Right Column - 33%) */}
+          {/* Control Panel  */}
           <div className="space-y-6">
             <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">

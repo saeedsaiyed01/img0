@@ -70,7 +70,7 @@ export function FileDropzone({
     <div
       {...getRootProps()}
       className={cn(
-        "relative group flex flex-col items-center justify-center w-full min-h-[350px] rounded-3xl border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden",
+        "relative group flex flex-col items-center justify-center w-full min-h-[350px] rounded-3xl border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden font-sans",
         isDragActive
           ? "border-blue-400 bg-blue-50 scale-[0.99]"
           : "border-slate-300 hover:border-slate-400 bg-slate-50/50 hover:bg-slate-50",
@@ -89,7 +89,6 @@ export function FileDropzone({
                 <div key={index} className="relative group">
                   <div className="aspect-square rounded-lg overflow-hidden border-2 border-slate-200 bg-white shadow-sm">
                     {file.type.startsWith("image/") ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={URL.createObjectURL(file)}
                         alt={file.name}
@@ -133,7 +132,6 @@ export function FileDropzone({
             {/* Image Preview Area */}
             <div className="flex-1 flex items-center justify-center p-8 min-h-[200px]">
               {files[0].type.startsWith("image/") ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={URL.createObjectURL(files[0])}
                   alt="Preview"
@@ -151,7 +149,6 @@ export function FileDropzone({
               <div className="flex items-center gap-3 min-w-0">
                 <div className="size-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
                   {files[0].type.startsWith("image/") ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={URL.createObjectURL(files[0])}
                       className="size-full object-cover rounded-lg opacity-80"
@@ -206,8 +203,6 @@ export function FileDropzone({
           </div>
         </div>
       )}
-
-      {/* Background decoration - only show when empty */}
       {files.length === 0 && (
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
       )}

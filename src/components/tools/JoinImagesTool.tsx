@@ -132,7 +132,7 @@ export function JoinImagesTool() {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto font-sans">
       <FileDropzone
         onFilesSelect={handleFilesSelect}
         multiple={true}

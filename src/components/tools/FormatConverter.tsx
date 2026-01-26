@@ -3,7 +3,7 @@
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { Download, RefreshCw, Settings2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface FormatConverterProps {
@@ -21,7 +21,6 @@ export default function FormatConverter({
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileSize, setFileSize] = useState<number | null>(null);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const processImage = async (file: File, q: number) => {
     setIsProcessing(true);
@@ -84,7 +83,7 @@ export default function FormatConverter({
   const extension = targetFormat.split('/')[1].replace('x-icon', 'ico').toUpperCase();
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="w-full max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 font-sans">
       
       {/* Input Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

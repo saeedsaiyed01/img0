@@ -93,7 +93,7 @@ export default function FaviconTool() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto animate-in fade-in duration-500">
+    <div className="w-full max-w-7xl mx-auto animate-in fade-in duration-500 font-sans">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Visual Preview Grid */}

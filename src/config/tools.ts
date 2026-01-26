@@ -163,20 +163,11 @@ export const tools: ToolConfig[] = [
   },
 ];
 
-// Group tools by category for potential future use
-export const toolCategories = {
-  convert: tools.filter(t => t.category === "convert").map(t => t.id),
-  encode: tools.filter(t => t.category === "encode").map(t => t.id),
-  generator: tools.filter(t => t.category === "generator").map(t => t.id),
-  edit: tools.filter(t => t.category === "editor").map(t => t.id),
-  pdf: tools.filter(t => t.category === "pdf").map(t => t.id),
-};
-
 export const CATEGORY_THEMES: Record<ToolCategory, { bg: string; text: string; icon: string }> = {
   convert: {
-    bg: "bg-blue-50 hover:bg-blue-100", // Soft interactive background
+    bg: "bg-blue-50 hover:bg-blue-100", 
     text: "text-blue-900",
-    icon: "bg-blue-100 text-blue-600" // Pastel Icon Container
+    icon: "bg-blue-100 text-blue-600" 
   },
   pdf: {
     bg: "bg-rose-50 hover:bg-rose-100",
@@ -199,5 +190,4 @@ export const CATEGORY_THEMES: Record<ToolCategory, { bg: string; text: string; i
     icon: "bg-amber-100 text-amber-600"
   },
 };
-// Keeping generic type for backward compatibility if needed, but we will mostly use CATEGORY_THEMES
-export const CATEGORY_COLORS = CATEGORY_THEMES;
+
