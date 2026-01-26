@@ -28,32 +28,31 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-1.5  rounded-full bg-slate-50 border border-slate-500 text-slate-500 text-xs font-medium uppercase tracking-[0.2em]"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-500"></span>
+            <span className="relative flex h-2 w-2"> 
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
             100% Secure
           </motion.div>
 
-          <div className="space-y-4 md:space-y-6">
+          <div className="space-y-1 md:space-y-2">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.6 }}
               className="text-4xl md:text-8xl  font-semibold tracking-[-0.05em] leading-[0.9]"
             >
-              Instant Image Tools.
+              The tools you need 
             </motion.h1>
             
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="flex justify-center mt-4"
+              className="flex justify-center"
             >
               <span className="relative inline-block px-6 md:px-6 py-1 md:py-3 text-4xl md:text-8xl font-semibold tracking-[-0.05em] leading-[0.9] text-slate-900 whitespace-nowrap">
-
-                Purely Local.
+                for your images.
               </span>
             </motion.div>
           </div>
@@ -64,8 +63,7 @@ export default function LandingPage() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="max-w-2xl mx-auto text-xl md:text-2xl text-slate-600 leading-relaxed font-normal tracking-tight mt-8"
           >
-            Professional utilities that run entirely in your browser RAM. <br className="hidden md:block" />
-            No server uploads. No data leaks. Absolute sovereignty.
+           Edit, convert, and optimize your images in seconds. No uploads required, so your files never leave your device.
           </motion.p>
           
           <motion.div 

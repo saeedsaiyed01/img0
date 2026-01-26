@@ -38,7 +38,7 @@ export function Footer() {
             <ul className="space-y-4 text-sm font-medium">
               <li><Link href="/" className="text-slate-500 hover:text-slate-900 transition-colors">Home</Link></li>
               <li><Link href="/tools" className="text-slate-500 hover:text-slate-900 transition-colors">All Tools</Link></li>
-              <li><Link href="#" className="text-slate-500 hover:text-slate-900 transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/privacy-policy" className="text-slate-500 hover:text-slate-900 transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
 
@@ -64,9 +64,9 @@ export function Footer() {
                 <Cpu className="w-4 h-4 text-slate-900" />
                 100% Client-Side
               </li>
-              <li className="flex items-center gap-2 text-slate-500">
-                <Globe className="w-4 h-4 text-slate-900" />
-                No Cloud Latency
+              <li id="offline-indicator" className="flex items-center gap-2 text-slate-500">
+                <Globe className="w-4 h-4 text-green-600" />
+                Offline Ready
               </li>
             </ul>
           </div>
