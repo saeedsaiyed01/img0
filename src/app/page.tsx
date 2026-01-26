@@ -106,86 +106,90 @@ export default function LandingPage() {
             whileInView="whileInView"
             viewport={{ once: true }}
             transition={{ staggerChildren: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:auto-rows-[300px]"
           >
             {/* Background Remover (Large) */}
-            <motion.div 
-              variants={{
-                initial: { opacity: 0, y: 20 },
-                whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-              }}
-              className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-[32px] border border-slate-100 bg-white p-8 hover:border-slate-200 transition-all shadow-sm hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.1)]"
-            >
-              <div className="flex flex-col h-full">
-                <div className="mb-auto">
-                   <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-8">
-                      <Sparkles className="w-8 h-8" />
-                   </div>
-                   <h3 className="text-2xl font-bold mb-4 tracking-tight">Background Remover</h3>
-                   <p className="text-xl text-slate-500 max-w-sm leading-relaxed">
-                     Industry-leading AI segmentation that runs locally. Perfect edges, zero latency.
-                   </p>
+            <Link href="/tools/remove-background" className="md:col-span-2 md:row-span-2 group">
+              <motion.div 
+                variants={{
+                  initial: { opacity: 0, y: 20 },
+                  whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="h-full relative overflow-hidden rounded-[32px] border border-slate-100 bg-white p-8 md:p-8 pb-12 md:pb-8 hover:border-slate-200 transition-all shadow-sm hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.1)]"
+              >
+                <div className="flex flex-col h-full">
+                  <div className="mb-auto">
+                     <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-8">
+                        <Sparkles className="w-8 h-8" />
+                     </div>
+                     <h3 className="text-2xl font-bold mb-4 tracking-tight">Background Remover</h3>
+                     <p className="text-xl text-slate-500 max-w-sm leading-relaxed mb-8 md:mb-0">
+                       Industry-leading AI segmentation that runs locally. Perfect edges, zero latency.
+                     </p>
+                  </div>
+                  <div className="mt-auto">
+                    <span className="inline-flex items-center text-slate-900 font-bold text-lg group-hover:gap-3 transition-all">
+                      Launch Tool <ArrowRight className="w-5 h-5 ml-2" />
+                    </span>
+                  </div>
                 </div>
-                <Link href="/tools/remove-background">
-                  <motion.button 
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center text-slate-900 font-bold text-lg group-hover:gap-3 transition-all"
-                  >
-                    Launch Tool <ArrowRight className="w-5 h-5 ml-2" />
-                  </motion.button>
-                </Link>
-              </div>
-              {/* Decorative element */}
-              <div className="absolute top-10 right-10 opacity-10 group-hover:opacity-20 transition-opacity">
-                <ImageIcon className="w-64 h-64 rotate-12" />
-              </div>
-            </motion.div>
+                {/* Decorative element */}
+                <div className="absolute top-10 right-10 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <ImageIcon className="w-64 h-64 rotate-12" />
+                </div>
+              </motion.div>
+            </Link>
 
             {/* Image to PDF */}
-            <motion.div 
-              variants={{
-                initial: { opacity: 0, y: 20 },
-                whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative overflow-hidden rounded-[32px] border border-slate-100 bg-slate-50 p-8 hover:bg-white hover:border-slate-200 transition-all shadow-sm hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.1)]"
-            >
-              <div className="flex flex-col h-full">
-                <div className="mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 mb-6">
-                    <FileText className="w-6 h-6" />
+            <Link href="/tools/image-to-pdf" className="group">
+              <motion.div 
+                variants={{
+                  initial: { opacity: 0, y: 20 },
+                  whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="h-full relative overflow-hidden rounded-[32px] border border-slate-100 bg-slate-50 p-8 hover:bg-white hover:border-slate-200 transition-all shadow-sm hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.1)]"
+              >
+                <div className="flex flex-col h-full">
+                  <div className="mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 mb-6">
+                      <FileText className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2 tracking-tight text-slate-900">Multi-Image to PDF</h3>
+                    <p className="text-slate-500">Merge images into professional documents instantly.</p>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2 tracking-tight">Multi-Image to PDF</h3>
-                  <p className="text-slate-500">Merge images into professional documents instantly.</p>
+                  <div className="mt-auto">
+                     <ArrowRight className="w-6 h-6 text-slate-400 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
+                  </div>
                 </div>
-                <Link href="/tools/image-to-pdf" className="mt-auto">
-                   <ArrowRight className="w-6 h-6 text-slate-400 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
-                </Link>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
 
             {/* Base64 Encoder */}
-            <motion.div 
-              variants={{
-                initial: { opacity: 0, y: 20 },
-                whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative overflow-hidden rounded-[32px] border border-slate-100 bg-slate-900 p-8 transition-all hover:scale-[1.02] hover:border-slate-800 hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.3)]"
-            >
-              <div className="flex flex-col h-full text-white">
-                <div className="mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white mb-6">
-                    <FileCode className="w-6 h-6" />
+            <Link href="/tools/image-to-base64" className="group">
+              <motion.div 
+                variants={{
+                  initial: { opacity: 0, y: 20 },
+                  whileInView: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="h-full relative overflow-hidden rounded-[32px] border border-slate-100 bg-slate-900 p-8 transition-all hover:scale-[1.02] hover:border-slate-800 hover:shadow-[-20px_30px_60px_-15px_rgba(0,0,0,0.3)]"
+              >
+                <div className="flex flex-col h-full text-white">
+                  <div className="mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white mb-6">
+                      <FileCode className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2 tracking-tight">Image to Base64</h3>
+                    <p className="text-slate-400">Directly embed assets into your codebases.</p>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2 tracking-tight">Image to Base64</h3>
-                  <p className="text-slate-400">Directly embed assets into your codebases.</p>
+                  <div className="mt-auto">
+                     <ArrowRight className="w-6 h-6 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                  </div>
                 </div>
-                <Link href="/tools/image-to-base64" className="mt-auto">
-                   <ArrowRight className="w-6 h-6 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
-                </Link>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           </motion.div>
         </div>
       </section>
