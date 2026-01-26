@@ -45,8 +45,15 @@ export async function generateMetadata(props: { params: Promise<{ tool: string }
   }
 
   return {
-    title: `${toolConfig.title} | IMG0.site`,
-    description: toolConfig.description,
+    title: `${toolConfig.title} | Purely Local Image Tools`,
+    description: `Use our free ${toolConfig.title}. Zero Uploads, 100% Privacy. Process everything directly in Browser RAM with this client-side utility.`,
+    alternates: {
+      canonical: toolConfig.href,
+    },
+    openGraph: {
+      title: `${toolConfig.title} | Purely Local Image Tools`,
+      description: `Free ${toolConfig.title} - Zero Uploads, 100% Private. Process images in your browser memory.`,
+    }
   };
 }
 
@@ -68,8 +75,30 @@ export default async function ToolPage(props: { params: Promise<{ tool: string }
     );
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": toolConfig.title,
+    "url": `https://img0.site${toolConfig.href}`,
+    "description": toolConfig.description,
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": "Offline processing, 100% Private, Client-side AI, Browser RAM processing, Zero Uploads",
+    "browserRequirements": "Requires JavaScript. Works in all modern browsers.",
+    "isAccessibleForFree": true,
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 pb-32 pt-16 space-y-12 animate-in fade-in duration-500 font-sans">
+       <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
        {/* Navigation / Header */}
        <div className="space-y-8">
           <Link

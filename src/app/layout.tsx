@@ -16,10 +16,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IMG0.site | Simple Image Tools",
-  description: "Free, private, and client-side image tools for everyone.",
+  metadataBase: new URL("https://img0.site"),
+  title: {
+    default: "IMG0.site | Simple, Secure Image Tools",
+    template: "%s | IMG0.site",
+  },
+  description: "Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads.",
   icons: {
     icon: "/insert-picture-icon.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://img0.site",
+    title: "IMG0.site | Purely Local Image Tools",
+    description: "Zero uploads. 100% Privacy. Process images directly in your browser.",
+    siteName: "IMG0.site",
+    images: [
+      {
+        url: "/OG-img0.png",
+        width: 1200,
+        height: 630,
+        alt: "IMG0.site - Private Browser-Based Tools",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IMG0.site | Purely Local Image Tools",
+    description: "Zero uploads. 100% Privacy. Free browser-based image utilities.",
+    images: ["/OG-img0.png"],
+  },
+  alternates: {
+    canonical: "./",
   },
 };
 
