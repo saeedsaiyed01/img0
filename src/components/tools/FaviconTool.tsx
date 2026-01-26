@@ -6,6 +6,7 @@ import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import { Archive, LayoutGrid, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const SIZES = [
   { size: 16, name: "favicon-16x16.png" },
@@ -75,20 +76,14 @@ export default function FaviconTool() {
       const ctx = icoCanvas.getContext("2d");
       if (ctx) {
           ctx.drawImage(img, 0, 0, 32, 32);
-          // Very basic ico mime type, usually browsers accept png masked as ico or special library needed.
-          // For simplicity/compatibility in client-side without huge libs, we often interpret png blob as ico or rely on a converter.
-          // However, for a true ICO, we usually need more headers. 
-          // Let's just save the 32x32 png as favicon.ico for basic usage or skip if strict.
-          // User asked for "Zip Generation", usually implies standard pack. 
-          // I will save favicon.ico as a copy of the 32x32 png for now to avoid huge binary logic, 
-          // although technically not a valid ICO container, it works in many contexts.
-          // Better: use the FormatConverter logic if I could, but let's keep it simple.
+          // Save 32x32 PNG as .ico for basic compatibility
           const blob = await new Promise<Blob | null>(r => icoCanvas.toBlob(r, "image/x-icon"));
           if (blob) zip.file("favicon.ico", blob);
       }
       
       const content = await zip.generateAsync({ type: "blob" });
       saveAs(content, "favicon-package.zip");
+      toast.success("Download started!");
 
     } catch (e) {
       console.error("Favicon Gen failed", e);
@@ -98,8 +93,8 @@ export default function FaviconTool() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto animate-in fade-in duration-500">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="w-full max-w-7xl mx-auto animate-in fade-in duration-500">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Visual Preview Grid */}
         <div className="md:col-span-2 space-y-4">
@@ -143,9 +138,9 @@ export default function FaviconTool() {
                 onClick={generatePackage}
                 disabled={!file || isProcessing}
                 className={cn(
-                    "w-full py-4 text-base font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5",
+                    "w-full h-14 text-base font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5",
                     file 
-                        ? "bg-violet-600 text-white hover:bg-violet-700"
+                        ? "bg-slate-900 text-white hover:bg-slate-800"
                         : "bg-slate-100 text-slate-400 cursor-not-allowed"
                 )}
             >

@@ -1,7 +1,10 @@
+import { BackgroundRemovalTool } from "@/components/tools/BackgroundRemovalTool";
 import { Base64Tool } from "@/components/tools/Base64Tool";
-import { EditorTool } from "@/components/tools/EditorTool"; // Assuming this is named, if error I will fix.
+import { BlurBackgroundTool } from "@/components/tools/BlurBackgroundTool";
+import { EditorTool } from "@/components/tools/EditorTool";
 import FaviconTool from "@/components/tools/FaviconTool";
 import FormatConverter from "@/components/tools/FormatConverter";
+import { JoinImagesTool } from "@/components/tools/JoinImagesTool";
 import PdfTool from "@/components/tools/PdfTool";
 import { SvgToJsxTool } from "@/components/tools/SvgToJsxTool";
 import { tools } from "@/config/tools";
@@ -18,6 +21,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   FaviconTool,
   SvgToJsxTool,
   EditorTool,
+  BackgroundRemovalTool,
+  BlurBackgroundTool,
+  JoinImagesTool,
 };
 
 // Required for static export
@@ -40,7 +46,7 @@ export async function generateMetadata(props: { params: Promise<{ tool: string }
   }
 
   return {
-    title: `${toolConfig.title} | img0.site`,
+    title: `${toolConfig.title} | IMG0.site`,
     description: toolConfig.description,
   };
 }
@@ -64,7 +70,7 @@ export default async function ToolPage(props: { params: Promise<{ tool: string }
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in duration-500 pt-8">
+    <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-500 pt-8">
        {/* Navigation / Header */}
        <div className="space-y-8">
           <Link

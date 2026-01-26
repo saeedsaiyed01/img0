@@ -1,8 +1,9 @@
 "use client";
 
 import { FileDropzone } from "@/components/ui/FileDropzone";
-import { Check, Code, Copy } from "lucide-react";
+import { Check, Copy, FileCode } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 // SVG attribute conversions for JSX
 const SVG_ATTRS: Record<string, string> = {
@@ -79,7 +80,7 @@ export function SvgToJsxTool() {
   const [copied, setCopied] = useState(false);
   const [fileName, setFileName] = useState("");
 
-  const handleFile = async (file: File) => {
+  const handleFileSelect = async (file: File) => {
     try {
       const text = await file.text();
       const converted = convertSvgToJsx(text);
@@ -95,57 +96,60 @@ export function SvgToJsxTool() {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(jsxCode);
     setCopied(true);
+    toast.success("Code copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
-      <FileDropzone
-        onFileSelect={handleFile}
-        accept={{ "image/svg+xml": [".svg"], "text/plain": [".svg"] }}
-        title="Upload SVG file"
-        description="We'll convert it to JSX-compatible code"
-        className="h-[300px] bg-slate-50 border-slate-200"
-      />
-
-      {jsxCode && (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="size-12 rounded-xl bg-amber-50 flex items-center justify-center">
-                <Code className="size-6 text-amber-600" />
-              </div>
-              <div>
-                <h3 className="font-bold text-xl text-slate-800">JSX Output</h3>
-                <p className="text-sm font-medium text-slate-500">{fileName}</p>
-              </div>
-            </div>
-            <button
-              onClick={copyToClipboard}
-              className="flex items-center gap-2 px-6 py-2.5 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition-colors font-semibold text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5"
-            >
-              {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-              {copied ? "Copied!" : "Copy Code"}
-            </button>
-          </div>
-
-          <div className="relative">
-            <textarea
-              readOnly
-              value={jsxCode}
-              className="w-full h-96 p-6 font-mono text-xs bg-slate-900 text-emerald-400 border border-slate-700 rounded-2xl resize-none focus:ring-2 focus:ring-amber-500 outline-none leading-relaxed shadow-lg selection:bg-amber-500/30"
-              spellCheck={false}
+    <div className="w-full max-w-7xl mx-auto space-y-8">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         {/* Workspace (Left - 66%) */}
+         <div className="lg:col-span-2 space-y-4">
+            <FileDropzone
+                onFileSelect={handleFileSelect}
+                accept={{ "image/svg+xml": [".svg"], "text/plain": [".svg"] }}
+                title="Upload SVG file"
+                description="We'll convert it to JSX-compatible code"
+                className="h-[500px] bg-slate-50 border-slate-200 rounded-3xl"
             />
-          </div>
+         </div>
 
-          <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl text-sm text-amber-800 font-medium">
-            <p>
-              <strong>Converted attributes:</strong> class → className, fill-rule →
-              fillRule, stroke-width → strokeWidth, and more.
-            </p>
-          </div>
-        </div>
-      )}
+         {/* Control Panel (Right - 33%) */}
+         <div className="space-y-6">
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                     <h2 className="text-lg font-bold text-slate-900">Output</h2>
+                     <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">JSX</span>
+                </div>
+
+                {jsxCode ? (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                         <div className="relative group">
+                            <pre className="w-full h-[400px] p-4 font-mono text-[10px] bg-slate-900 text-teal-400 rounded-xl overflow-auto border border-slate-800 shadow-inner custom-scrollbar">
+                                {jsxCode}
+                            </pre>
+                             <button
+                                onClick={copyToClipboard}
+                                className="absolute top-2 right-2 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm transition-all shadow-sm"
+                                title="Copy to clipboard"
+                            >
+                                {copied ? <Check className="size-4 text-emerald-400" /> : <Copy className="size-4" />}
+                            </button>
+                         </div>
+                         
+                         <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-800 leading-relaxed">
+                             <strong>Tip:</strong> Attributes like <code>class</code> are automatically converted to <code>className</code>.
+                        </div>
+                    </div>
+                ) : (
+                    <div className="h-[200px] flex flex-col items-center justify-center text-slate-400 border-2 border-dashed border-slate-100 rounded-xl bg-slate-50/50">
+                        <FileCode className="size-8 mb-2 opacity-50" />
+                         <p className="text-sm">No code generated</p>
+                    </div>
+                )}
+            </div>
+         </div>
+       </div>
     </div>
   );
 }

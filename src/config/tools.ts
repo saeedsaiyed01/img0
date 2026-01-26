@@ -1,13 +1,13 @@
 import {
-    Code2,
-    FileCode,
-    FileImage,
-    FileText,
-    Image,
-    LucideIcon,
-    MonitorSmartphone,
-    RotateCw,
-    Scissors,
+  Code2,
+  FileCode,
+  FileImage,
+  FileText,
+  Image,
+  LucideIcon,
+  MonitorSmartphone,
+  RotateCw,
+  Scissors,
 } from "lucide-react";
 
 export type ToolCategory = "convert" | "pdf" | "generator" | "editor" | "encode";
@@ -27,7 +27,7 @@ export const tools: ToolConfig[] = [
   // Base64 Tool
   {
     id: "image-to-base64",
-    title: "Image to Text Code",
+    title: "Image to Base64",
     description: "For developers who need to turn images into code.",
     icon: FileCode,
     href: "/tools/image-to-base64",
@@ -129,6 +129,36 @@ export const tools: ToolConfig[] = [
     href: "/tools/rotate-image",
     component: "EditorTool",
     props: { mode: "rotate" },
+    category: "editor",
+  },
+  
+  // Magic Tools
+  {
+    id: "remove-background",
+    title: "Remove Background",
+    description: "Remove image backgrounds automatically with AI.",
+    icon: Scissors,
+    href: "/tools/remove-background",
+    component: "BackgroundRemovalTool",
+    category: "editor",
+  },
+  {
+    id: "blur-background",
+    title: "Blur Background",
+    description: "Blur the background of your photo just like Portrait mode.",
+    icon: Image,
+    href: "/tools/blur-background",
+    component: "BlurBackgroundTool",
+    category: "editor",
+  },
+
+  {
+    id: "join-images",
+    title: "Join Images",
+    description: "Combine multiple images into one frame.",
+    icon: FileImage,
+    href: "/tools/join-images",
+    component: "JoinImagesTool",
     category: "editor",
   },
 ];

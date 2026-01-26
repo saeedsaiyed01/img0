@@ -14,7 +14,7 @@ interface ToolCardProps {
   index: number;
 }
 
-export function ToolCard({ title, description, href, category, icon }: ToolCardProps) {
+export function ToolCard({ title, description, href, category, icon, index }: ToolCardProps) {
   const theme = CATEGORY_THEMES[category] || CATEGORY_THEMES.encode;
 
   return (
@@ -53,7 +53,7 @@ export function ToolCard({ title, description, href, category, icon }: ToolCardP
             </h3>
             {/* Technical ID for "UI Density" look */}
             <span className="font-mono text-[10px] uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                {category.substring(0,3).toUpperCase()}-0{Math.floor(Math.random() * 9) + 1}
+                {category.substring(0,3).toUpperCase()}-0{(index % 9) + 1}
             </span>
         </div>
         

@@ -4,6 +4,7 @@ import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { Download, RefreshCw, Settings2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 interface FormatConverterProps {
   targetFormat: string;
@@ -76,17 +77,18 @@ export default function FormatConverter({
       link.href = convertedUrl;
       link.download = name;
       link.click();
+      toast.success("Download started!");
     }
   };
 
   const extension = targetFormat.split('/')[1].replace('x-icon', 'ico').toUpperCase();
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="w-full max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
       
       {/* Input Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
             <FileDropzone
                 onFileSelect={setFile}
                 title="Drop image to convert"
@@ -161,9 +163,9 @@ export default function FormatConverter({
                 onClick={handleDownload}
                 disabled={!convertedUrl}
                 className={cn(
-                    "w-full py-4 text-base font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5",
+                    "w-full h-14 text-base font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95",
                     convertedUrl 
-                        ? "bg-[#2563EB] hover:bg-[#1d4ed8] text-white"
+                        ? "bg-slate-900 hover:bg-slate-800 text-white"
                         : "bg-slate-100 text-slate-400 cursor-not-allowed"
                 )}
             >
