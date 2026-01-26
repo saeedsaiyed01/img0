@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",
+    "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
     "jspdf": "^4.0.0",
