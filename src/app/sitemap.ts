@@ -1,6 +1,8 @@
 import { tools } from '@/config/tools';
 import { MetadataRoute } from 'next';
 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://img0.site';
 
