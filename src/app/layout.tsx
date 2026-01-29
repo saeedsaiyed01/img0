@@ -1,7 +1,7 @@
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { Analytics } from "@vercel/analytics/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -16,6 +16,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://img0.site"),
   title: {
@@ -23,8 +27,15 @@ export const metadata: Metadata = {
     template: "%s | img0.site",
   },
   description: "Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads. Offline capable.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "img0",
+  },
   icons: {
     icon: "/insert-picture-icon.png",
+    apple: "/insert-picture-icon.png", // Add apple icon too if possible, reusing the distinct icon
   },
   openGraph: {
     type: "website",
@@ -53,6 +64,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { PwaRegister } from "@/components/PwaRegister";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,6 +76,7 @@ export default function RootLayout({
       <body
         className={`bg-white text-slate-900 antialiased selection:bg-slate-900 selection:text-white overflow-x-hidden`}
       >
+        <PwaRegister />
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-1 w-full">
