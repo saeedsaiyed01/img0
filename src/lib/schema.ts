@@ -1,9 +1,9 @@
 import { ToolConfig } from "@/config/tools";
 
 export const siteConfig = {
-  name: "img0.site",
+  name: "img0 (image0)",
   url: "https://img0.site",
-  description: "Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads.",
+  description: "img0 (image0): Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads.",
   links: {
     twitter: "https://x.com/img0dotsite", 
   },
@@ -17,7 +17,7 @@ export function generateOrganizationSchema() {
     "name": siteConfig.name,
     "url": siteConfig.url,
     "logo": `${siteConfig.url}/OG-img0.png`,
-    "description": "Privacy-first web-based image utilities.",
+    "description": "img0 (image0): Privacy-first web-based image utilities. Process images locally without uploads.",
     "sameAs": [
       siteConfig.links.twitter
     ]

@@ -156,7 +156,7 @@ export default async function ToolPage(props: { params: Promise<{ tool: string }
       </div>
 
       {/* --- SEO CONTENT SECTIONS --- */}
-      <div className="border-t border-slate-200 pt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 text-slate-800">
+      <div className="border-t border-slate-200 pt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 text-slate-800 items-start">
         
         {/* Left Column (Content) */}
         <div className="lg:col-span-8 space-y-12">

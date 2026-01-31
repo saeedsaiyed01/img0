@@ -16,12 +16,18 @@ export function constructMetadata({
   url = "https://img0.site",
   image = "/OG-img0.png",
   keywords = [
+    "image0",
+    "img0",
+    "image zero",
+    "img zero",
     "Image Converter",
     "Background Remover",
     "Private Image Tools",
     "Local Image Processing",
     "WebAssembly Tools",
-    "Browser-based PDF Combiner"
+    "Browser-based PDF Combiner",
+    "Free Image Tools",
+    "Offline Image Editor"
   ],
   canonical,
   noIndex = false,

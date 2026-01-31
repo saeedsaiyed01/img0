@@ -23,10 +23,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://img0.site"),
   title: {
-    default: "img0 | Instant Image Tools. Purely Local & Private.",
+    default: "img0 (image0) | Instant Image Tools. Purely Local & Private.",
     template: "%s | img0.site",
   },
-  description: "Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads. Offline capable.",
+  description: "img0 (image0): Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads. Offline capable.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://img0.site",
-    title: "img0 | Instant Image Tools. Purely Local & Private.",
-    description: "Zero uploads. 100% Privacy. Process images directly in your browser.",
+    title: "img0 (image0) | Instant Image Tools. Purely Local & Private.",
+    description: "img0 (image0): Zero uploads. 100% Privacy. Process images directly in your browser.",
     siteName: "img0.site",
     images: [
       {
@@ -55,8 +55,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "img0 | Instant Image Tools. Purely Local & Private.",
-    description: "Zero uploads. 100% Privacy. Free browser-based image utilities.",
+    title: "img0 (image0) | Instant Image Tools. Purely Local & Private.",
+    description: "img0 (image0): Zero uploads. 100% Privacy. Free browser-based image utilities.",
     images: ["/OG-img0.png"],
   },
   alternates: {
