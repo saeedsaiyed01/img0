@@ -4,10 +4,13 @@ import {
   FileImage,
   FileText,
   Image,
+  LayoutGrid,
   LucideIcon,
+  Minimize2,
   MonitorSmartphone,
+  PenTool,
   RotateCw,
-  Scissors,
+  Scissors
 } from "lucide-react";
 
 export type ToolCategory = "convert" | "pdf" | "generator" | "editor" | "encode";
@@ -159,6 +162,39 @@ export const tools: ToolConfig[] = [
     icon: FileImage,
     href: "/tools/join-images",
     component: "JoinImagesTool",
+    category: "editor",
+  },
+
+  // Compression & Optimization
+  {
+    id: "compress-image",
+    title: "Compress Image",
+    description: "Reduce file size while keeping quality high.",
+    icon: Minimize2,
+    href: "/tools/compress-image",
+    component: "CompressorTool",
+    category: "editor",
+  },
+
+  // Social Media Tools
+  {
+    id: "social-resize",
+    title: "Social Media Resize",
+    description: "Instantly resize for Instagram, YouTube, Twitter & more.",
+    icon: LayoutGrid,
+    href: "/tools/social-resize",
+    component: "SocialResizeTool",
+    category: "generator",
+  },
+
+  // Watermark Tool
+  {
+    id: "add-watermark",
+    title: "Add Watermark",
+    description: "Protect images with text or logo overlays.",
+    icon: PenTool,
+    href: "/tools/add-watermark",
+    component: "WatermarkTool",
     category: "editor",
   },
 ];

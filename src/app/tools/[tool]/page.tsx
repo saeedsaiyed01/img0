@@ -16,6 +16,9 @@ const SvgToJsxTool = dynamic(() => import("@/components/tools/SvgToJsxTool").the
 const FaviconTool = dynamic(() => import("@/components/tools/FaviconTool"));
 const FormatConverter = dynamic(() => import("@/components/tools/FormatConverter"));
 const PdfTool = dynamic(() => import("@/components/tools/PdfTool"));
+const CompressorTool = dynamic(() => import("@/components/tools/CompressorTool").then(mod => mod.CompressorTool));
+const SocialResizeTool = dynamic(() => import("@/components/tools/SocialResizeTool").then(mod => mod.SocialResizeTool));
+const WatermarkTool = dynamic(() => import("@/components/tools/WatermarkTool").then(mod => mod.WatermarkTool));
 
 // Component registry
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
@@ -28,6 +31,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   BackgroundRemovalTool,
   BlurBackgroundTool,
   JoinImagesTool,
+  CompressorTool,
+  SocialResizeTool,
+  WatermarkTool,
 };
 
 export function generateStaticParams() {
