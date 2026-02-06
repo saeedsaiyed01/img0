@@ -59,14 +59,33 @@ export async function generateMetadata(props: { params: Promise<{ tool: string }
     "image-to-pdf": "Combine Images into PDF Online | Local-First, Zero Data Leaks",
     "image-to-base64": "Convert Image to Base64 String | Fast, Secure, Local",
     "remove-background": "AI Background Remover | Browser-Based, Privacy-Native",
+    "compress-image": "Compress Images Online Free | Reduce File Size, Keep Quality",
+    "social-resize": "Resize Images for Social Media | Instagram, YouTube, Twitter Sizes",
+    "add-watermark": "Add Watermark to Images Online | Text & Logo Overlay Tool",
+  };
+
+  const customKeywords: Record<string, string[]> = {
+    "image-to-png": ["convert to png", "jpg to png", "webp to png", "image converter", "png converter online", "transparent png"],
+    "image-to-pdf": ["images to pdf", "combine images pdf", "photo to pdf", "jpg to pdf", "png to pdf", "pdf maker"],
+    "image-to-base64": ["image to base64", "base64 encoder", "data uri", "embed image", "base64 converter", "inline image"],
+    "remove-background": ["remove background", "background remover", "transparent background", "cut out image", "ai background removal", "photo background eraser"],
+    "compress-image": ["compress image", "reduce image size", "image compressor", "optimize image", "shrink photo", "reduce file size", "jpeg compression", "png optimizer"],
+    "social-resize": ["resize for instagram", "social media image sizes", "youtube thumbnail size", "twitter image size", "linkedin post size", "instagram story dimensions", "resize image for facebook"],
+    "add-watermark": ["add watermark", "watermark tool", "text watermark", "logo watermark", "image watermark", "protect images", "watermark generator", "overlay text on image"],
+    "blur-background": ["blur background", "portrait mode", "depth of field", "bokeh effect", "background blur online"],
+    "join-images": ["join images", "combine photos", "merge images", "photo collage", "stitch images together"],
+    "favicon-generator": ["favicon generator", "app icon maker", "website icon", "pwa icons", "apple touch icon"],
+    "svg-to-jsx": ["svg to jsx", "svg to react", "svg component", "react icon", "convert svg code"],
   };
 
   const title = customTitles[toolConfig.id] || toolConfig.title;
+  const keywords = customKeywords[toolConfig.id];
 
   return constructMetadata({
     title,
     description: toolConfig.description + " Zero uploads, 100% privacy context. Process images directly in browser memory.",
     canonical: toolConfig.href,
+    ...(keywords && { keywords }),
   });
 }
 
