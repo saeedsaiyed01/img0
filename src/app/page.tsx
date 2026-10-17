@@ -14,13 +14,13 @@ const presenceAnimations = {
 export default function LandingPage() {
   return (
     <div className="bg-white font-sans">
-      
+
       {/* Hero Section */}
       <section className="relative pt-16 pb-16 md:pt-48 md:pb-32 px-4">
         {/* Subtle Tech Pattern */}
         <div className="absolute inset-0 -z-10 opacity-[0.03] pointer-events-none" 
              style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-        
+
         <div className="container mx-auto max-w-6xl text-center space-y-8 md:space-y-12 mt-4 md:mt-[-150px]">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
@@ -32,7 +32,7 @@ export default function LandingPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            100% Secure
+            No image uploads
           </motion.div>
 
           <div className="space-y-1 md:space-y-2">
@@ -42,9 +42,9 @@ export default function LandingPage() {
               transition={{ delay: 0.1, duration: 0.6 }}
               className="text-4xl md:text-8xl  font-semibold tracking-[-0.05em] leading-[0.9]"
             >
-              The tools you need 
+              Free online image tools
             </motion.h1>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -52,11 +52,11 @@ export default function LandingPage() {
               className="flex justify-center"
             >
               <span className="relative inline-block px-6 md:px-6 py-1 md:py-3 text-4xl md:text-8xl font-semibold tracking-[-0.05em] leading-[0.9] text-slate-900 whitespace-nowrap">
-                for your images.
+                without uploads.
               </span>
             </motion.div>
           </div>
-          
+
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ export default function LandingPage() {
           >
            Edit, convert, and optimize your images in seconds. No uploads required, so your files never leave your device.
           </motion.p>
-          
+
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,7 +123,7 @@ export default function LandingPage() {
                      </div>
                      <h3 className="text-2xl font-bold mb-4 tracking-tight">Background Remover</h3>
                      <p className="text-xl text-slate-500 max-w-sm leading-relaxed mb-8 md:mb-0">
-                       Industry-leading AI segmentation that runs locally. Perfect edges, zero latency.
+                       AI background removal that runs on your device. Preview the edges before downloading.
                      </p>
                   </div>
                   <div className="mt-auto">
@@ -212,7 +212,7 @@ export default function LandingPage() {
               </div>
               <h4 className="text-2xl font-bold">Works Offline</h4>
               <p className="text-slate-500 leading-relaxed">
-                Once loaded, img0 functions perfectly without an internet connection. Complete your tasks anywhere, with maximum security.
+                Cached tools can work offline. Open the tools you need first; AI features also require downloaded model assets.
               </p>
             </motion.div>
 
@@ -220,9 +220,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white">
                 <Shield className="w-6 h-6" />
               </div>
-              <h4 className="text-2xl font-bold">No File Size Limits</h4>
+              <h4 className="text-2xl font-bold">Uses Your Device</h4>
               <p className="text-slate-500 leading-relaxed">
-                Unlock the power of your own hardware. Process massive high-res images that would crash or trigger paywalls on cloud-based tools.
+                Processing capacity depends on your browser and available memory. Try smaller images if a large file cannot be processed.
               </p>
             </motion.div>
           </div>
@@ -231,7 +231,7 @@ export default function LandingPage() {
 
 
 
-      
+
       {/* Local-Only Visualizer */}
       <motion.section 
         {...presenceAnimations}
@@ -298,8 +298,8 @@ export default function LandingPage() {
             <div className="space-y-4">
               <h3 className="text-3xl font-bold text-slate-900">End-to-End Local</h3>
               <p className="text-lg text-slate-500 max-w-md mx-auto">
-                Your data stays in your browser's memory, period. 
-                Processing completes before the first byte could even leave your network.
+                Your images stay in your browser&apos;s memory.
+                The site and AI models need network access to load. Your image processing happens on your device.
               </p>
             </div>
           </div>
@@ -312,9 +312,9 @@ export default function LandingPage() {
         className="py-16 md:py-32 px-4 border-t border-slate-100"
       >
         <div className="container mx-auto max-w-4xl text-center space-y-8">
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter">Tools without the telemetry.</h2>
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter">Image tools without image uploads.</h2>
           <p className="text-xl text-slate-500 max-w-xl mx-auto">
-            Experience professional image processing that respects your privacy. 100% free, forever.
+            Convert, compress, and edit images locally in your browser. Free to use, with no account required.
           </p>
           <div className="pt-8">
             <Link href="/tools">

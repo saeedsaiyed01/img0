@@ -1,7 +1,8 @@
 import { constructMetadata } from "@/components/SEO";
 import { tools } from "@/config/tools";
-import { generateFAQSchema, generateOrganizationSchema, generateSoftwareApplicationSchema } from "@/lib/schema";
-import { ArrowLeft, ArrowRight, Check, Database, Lock, ShieldCheck, Sparkles, X, Zap } from "lucide-react";
+import { toolSeo } from "@/config/tool-seo";
+import { generateBreadcrumbSchema, generateFAQSchema, generateSoftwareApplicationSchema } from "@/lib/schema";
+import { ArrowRight, Lock, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -21,7 +22,7 @@ const SocialResizeTool = dynamic(() => import("@/components/tools/SocialResizeTo
 const WatermarkTool = dynamic(() => import("@/components/tools/WatermarkTool").then(mod => mod.WatermarkTool));
 
 // Component registry
-const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
+const COMPONENT_MAP = {
   Base64Tool,
   FormatConverter,
   PdfTool,
@@ -43,263 +44,79 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata(props: { params: Promise<{ tool: string }> }) {
-  const params = await props.params;
-  const toolConfig = tools.find((t) => t.id === params.tool);
-
-  if (!toolConfig) {
-    return constructMetadata({
-      title: "Tool Not Found",
-      description: "The requested utility could not be located.",
-      noIndex: true,
-    });
-  }
-
-  const customTitles: Record<string, string> = {
-    "image-to-png": "Convert Image to PNG Instantly | 100% Private, No Uploads",
-    "image-to-pdf": "Combine Images into PDF Online | Local-First, Zero Data Leaks",
-    "image-to-base64": "Convert Image to Base64 String | Fast, Secure, Local",
-    "remove-background": "AI Background Remover | Browser-Based, Privacy-Native",
-    "compress-image": "Compress Images Online Free | Reduce File Size, Keep Quality",
-    "social-resize": "Resize Images for Social Media | Instagram, YouTube, Twitter Sizes",
-    "add-watermark": "Add Watermark to Images Online | Text & Logo Overlay Tool",
-  };
-
-  const customKeywords: Record<string, string[]> = {
-    "image-to-png": ["convert to png", "jpg to png", "webp to png", "image converter", "png converter online", "transparent png"],
-    "image-to-pdf": ["images to pdf", "combine images pdf", "photo to pdf", "jpg to pdf", "png to pdf", "pdf maker"],
-    "image-to-base64": ["image to base64", "base64 encoder", "data uri", "embed image", "base64 converter", "inline image"],
-    "remove-background": ["remove background", "background remover", "transparent background", "cut out image", "ai background removal", "photo background eraser"],
-    "compress-image": ["compress image", "reduce image size", "image compressor", "optimize image", "shrink photo", "reduce file size", "jpeg compression", "png optimizer"],
-    "social-resize": ["resize for instagram", "social media image sizes", "youtube thumbnail size", "twitter image size", "linkedin post size", "instagram story dimensions", "resize image for facebook"],
-    "add-watermark": ["add watermark", "watermark tool", "text watermark", "logo watermark", "image watermark", "protect images", "watermark generator", "overlay text on image"],
-    "blur-background": ["blur background", "portrait mode", "depth of field", "bokeh effect", "background blur online"],
-    "join-images": ["join images", "combine photos", "merge images", "photo collage", "stitch images together"],
-    "favicon-generator": ["favicon generator", "app icon maker", "website icon", "pwa icons", "apple touch icon"],
-    "svg-to-jsx": ["svg to jsx", "svg to react", "svg component", "react icon", "convert svg code"],
-  };
-
-  const title = customTitles[toolConfig.id] || toolConfig.title;
-  const keywords = customKeywords[toolConfig.id];
-
-  return constructMetadata({
-    title,
-    description: toolConfig.description + " Zero uploads, 100% privacy context. Process images directly in browser memory.",
-    canonical: toolConfig.href,
-    ...(keywords && { keywords }),
-  });
+  const { tool } = await props.params;
+  const config = tools.find(item => item.id === tool);
+  if (!config) return constructMetadata({ title: "Tool Not Found", description: "The requested image tool could not be found.", noIndex: true });
+  const content = toolSeo[config.id];
+  return constructMetadata({ title: content.title, description: content.description, canonical: config.href });
 }
 
 export default async function ToolPage(props: { params: Promise<{ tool: string }> }) {
-  const params = await props.params;
-  const toolConfig = tools.find((t) => t.id === params.tool);
-
-  if (!toolConfig) {
-    return notFound();
-  }
-
-  const ToolComponent = COMPONENT_MAP[toolConfig.component];
-
-  if (!ToolComponent) {
-    return (
-      <div className="p-8 text-center font-mono text-red-500 border border-red-500">
-        ERR: COMPONENT_LOAD_FAIL [{toolConfig.component}]
-      </div>
-    );
-  }
-
-  const jsonLd = [
-    generateOrganizationSchema(),
-    generateSoftwareApplicationSchema(toolConfig),
-    generateFAQSchema([
-      { question: `Is this ${toolConfig.title} free?`, answer: "Yes, this tool is completely free to use without any limits." },
-      { question: "Is my data private?", answer: "Absolutely. We use WebAssembly technology to process your files locally on your device. They are never uploaded to our servers." },
-      { question: "Does this work offline?", answer: "Yes! img0.site is a PWA (Progressive Web App). Once loaded, you can use it without an internet connection." },
-    ]),
+  const { tool } = await props.params;
+  const toolConfig = tools.find(item => item.id === tool);
+  if (!toolConfig) notFound();
+  const content = toolSeo[toolConfig.id];
+  const ToolComponent = COMPONENT_MAP[toolConfig.component as keyof typeof COMPONENT_MAP] as React.ComponentType<Record<string, unknown>>;
+  if (!ToolComponent) throw new Error("Missing tool component: " + toolConfig.component);
+  const faqs = [
+    ...content.faqs,
+    { question: "Are my image files uploaded?", answer: "No. Image processing happens locally in your browser. The website downloads its code and, for AI tools, model assets. Anonymous site usage analytics are separate from your image files." },
+    { question: "Is this tool free to use?", answer: "Yes. No account or payment is required. Processing capacity depends on your browser, image dimensions, and available device memory." },
   ];
-
-  const relatedTools = tools
-    .filter(t => t.id !== toolConfig.id)
-    .sort((a, b) => (a.category === toolConfig.category ? -1 : 1))
-    .slice(0, 3);
+  const jsonLd = [generateSoftwareApplicationSchema(toolConfig), generateBreadcrumbSchema(toolConfig), generateFAQSchema(faqs)];
+  const relatedTools = content.related.map(id => tools.find(item => item.id === id)).filter((item): item is (typeof tools)[number] => Boolean(item));
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pb-32 pt-16 space-y-16 animate-in fade-in duration-500 font-sans">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      {/* --- HERO / HEADER --- */}
-      <div className="space-y-8">
-        <Link
-          href="/"
-          className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors group"
-        >
-          <ArrowLeft className="size-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Back to Tools
-        </Link>
-
-        <div className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-white border border-slate-100 rounded-2xl shadow-sm">
-                  <toolConfig.icon className="size-8 text-blue-600" strokeWidth={1.5} />
-                </div>
-                <h1 className="text-4xl font-black tracking-[-0.05em] text-slate-900 leading-tight">
-                    {toolConfig.title}
-                </h1>
-              </div>
-              <p className="text-lg text-slate-500 max-w-2xl leading-relaxed pl-1 font-medium">
-                {toolConfig.description}
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3 min-w-[200px]">
-              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wide border border-emerald-100 bg-emerald-50 rounded-full px-4 py-2 text-emerald-700">
-                <span className="flex items-center gap-2">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Privately Secure
-                </span>
-                <span>Local</span>
-              </div>
-              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wide border border-blue-100 bg-blue-50 rounded-full px-4 py-2 text-blue-700">
-                <span className="flex items-center gap-2">
-                  <Database className="w-3.5 h-3.5" />
-                  WebAssembly
-                </span>
-                <span>Speed</span>
-              </div>
-            </div>
+    <div className="max-w-6xl mx-auto px-4 pb-32 pt-6 space-y-6 md:pt-8 font-sans">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+        <Link href="/" className="hover:text-slate-900">Home</Link><span aria-hidden="true">/</span>
+        <Link href="/tools/" className="hover:text-slate-900">Image Tools</Link><span aria-hidden="true">/</span>
+        <span aria-current="page" className="text-slate-900">{toolConfig.title}</span>
+      </nav>
+      <header className="flex flex-col md:flex-row md:items-start justify-between gap-3 border-b border-slate-200 pb-5">
+        <div className="space-y-2 max-w-3xl">
+          <div className="flex items-center gap-4">
+            <div className="hidden p-2 border border-slate-100 rounded-xl md:block"><toolConfig.icon className="size-6 text-blue-600" strokeWidth={1.5} aria-hidden="true" /></div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">{toolConfig.title}</h1>
           </div>
+          <p className="text-sm md:text-base text-slate-600 leading-relaxed">{toolConfig.description}</p>
         </div>
-      </div>
-
-      {/* --- MAIN TOOL COMPONENT --- */}
-      <div className="min-h-[400px]">
-        <ToolComponent {...(toolConfig.props || {})} />
-      </div>
-
-      {/* --- SEO CONTENT SECTIONS --- */}
-      <div className="border-t border-slate-200 pt-16 grid grid-cols-1 lg:grid-cols-12 gap-12 text-slate-800 items-start">
-        
-        {/* Left Column (Content) */}
-        <div className="lg:col-span-8 space-y-12">
-            
-            {/* H2: Why Choose */}
-            <section className="space-y-6">
-                <h2 className="text-3xl font-bold tracking-tight text-slate-900">Why choose img0 for {toolConfig.title}?</h2>
-                <div className="grid sm:grid-cols-2 gap-6">
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                        <Lock className="w-8 h-8 text-emerald-600 mb-4" />
-                        <h3 className="text-lg font-bold mb-2">100% Private</h3>
-                        <p className="text-slate-600 text-sm leading-relaxed">Most online coverters upload your images to a remote server. We don't. Your files never leave your device.</p>
-                    </div>
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                        <Zap className="w-8 h-8 text-amber-500 mb-4" />
-                        <h3 className="text-lg font-bold mb-2">Instant Processing</h3>
-                        <p className="text-slate-600 text-sm leading-relaxed">No queue times, no slow uploads. We use your computer's power to process images instantly.</p>
-                    </div>
-                </div>
-            </section>
-
-             {/* H2: Comparison Table */}
-             <section className="space-y-6">
-                <h2 className="text-2xl font-bold text-slate-900">img0 vs. Cloud Converters</h2>
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <table className="w-full text-sm">
-                        <thead className="bg-slate-50 border-b border-slate-200">
-                            <tr>
-                                <th className="px-6 py-4 text-left font-bold text-slate-900">Feature</th>
-                                <th className="px-6 py-4 text-left font-bold text-emerald-700 bg-emerald-50/50">img0.site (Local)</th>
-                                <th className="px-6 py-4 text-left font-bold text-slate-500">Cloud Tools</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                            <tr>
-                                <td className="px-6 py-4 font-medium text-slate-700">Privacy</td>
-                                <td className="px-6 py-4 text-emerald-700 font-bold flex items-center gap-2 bg-emerald-50/30">
-                                    <Check className="size-4" /> 100% Private
-                                </td>
-                                <td className="px-6 py-4 text-red-500 flex items-center gap-2">
-                                     <X className="size-4" /> Files Uploaded
-                                </td>
-                            </tr>
-                             <tr>
-                                <td className="px-6 py-4 font-medium text-slate-700">Speed</td>
-                                <td className="px-6 py-4 text-emerald-700 font-bold bg-emerald-50/30">Instant (0ms latency)</td>
-                                <td className="px-6 py-4 text-slate-500">Depends on Upload</td>
-                            </tr>
-                            <tr>
-                                <td className="px-6 py-4 font-medium text-slate-700">File Limit</td>
-                                <td className="px-6 py-4 text-emerald-700 font-bold bg-emerald-50/30">Unlimited</td>
-                                <td className="px-6 py-4 text-slate-500">Often Restricted</td>
-                            </tr>
-                             <tr>
-                                <td className="px-6 py-4 font-medium text-slate-700">Offline Use</td>
-                                <td className="px-6 py-4 text-emerald-700 font-bold bg-emerald-50/30">Yes (PWA)</td>
-                                <td className="px-6 py-4 text-slate-500">No</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-             {/* H2: How to use */}
-             <section className="space-y-6">
-                <h2 className="text-2xl font-bold text-slate-900">How to use {toolConfig.title}</h2>
-                <ol className="list-decimal pl-5 space-y-4 text-slate-700 marker:text-slate-400 marker:font-bold">
-                    <li className="pl-2">
-                        <span className="font-bold text-slate-900">Select your file:</span> Click the box above or drag and drop your image.
-                    </li>
-                    <li className="pl-2">
-                        <span className="font-bold text-slate-900">Adjust settings:</span> Customize options if available (e.g., quality, format).
-                    </li>
-                    <li className="pl-2">
-                        <span className="font-bold text-slate-900">Download:</span> Instantly save the processed file to your device.
-                    </li>
-                </ol>
-             </section>
-
-        </div>
-
-        {/* Right Column (Related Tools) */}
-        <div className="lg:col-span-4 space-y-8">
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200 sticky top-24">
-                <div className="flex items-center gap-2 mb-6">
-                    <Sparkles className="size-5 text-purple-600" />
-                    <h3 className="font-bold text-slate-900">Related Tools</h3>
-                </div>
-                <div className="space-y-3">
-                    {relatedTools.map((tool) => (
-                        <Link 
-                            key={tool.id} 
-                            href={tool.href}
-                            className="flex items-start gap-4 p-3 rounded-xl hover:bg-white hover:shadow-md transition-all group bg-white/50 border border-transparent hover:border-slate-100"
-                        >
-                            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:scale-110 transition-transform">
-                                <tool.icon className="size-5" />
-                            </div>
-                            <div>
-                                <h4 className="font-semibold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
-                                    {tool.title}
-                                </h4>
-                                <p className="text-xs text-slate-500 line-clamp-2 mt-0.5">
-                                    {tool.description}
-                                </p>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-                <Link 
-                    href="/" 
-                    className="mt-6 flex items-center justify-center w-full py-3 text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-white rounded-xl transition-all border border-transparent hover:border-slate-200"
-                >
-                    View All Tools <ArrowRight className="ml-2 size-4" />
-                </Link>
+        <span className="inline-flex items-center self-start gap-2 text-xs font-semibold rounded-full px-4 py-2 bg-emerald-50 text-emerald-800"><ShieldCheck className="size-4" aria-hidden="true" />No image uploads</span>
+      </header>
+      <div className="min-h-[400px]"><ToolComponent {...(toolConfig.props || {})} /></div>
+      <div className="border-t border-slate-200 pt-12 grid grid-cols-1 lg:grid-cols-12 gap-12 text-slate-800 items-start">
+        <div className="lg:col-span-8 space-y-10">
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold tracking-tight">About {toolConfig.title}</h2>
+            <p className="text-slate-600 leading-relaxed">{content.overview}</p>
+          </section>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold tracking-tight">How to use {toolConfig.title}</h2>
+            <ol className="list-decimal pl-5 space-y-3 text-slate-600">{content.steps.map(step => <li key={step} className="pl-2 leading-relaxed">{step}</li>)}</ol>
+          </section>
+          <section className="grid sm:grid-cols-2 gap-6" aria-label="Local processing">
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <Lock className="size-7 text-emerald-700 mb-3" aria-hidden="true" /><h2 className="text-lg font-bold mb-2">Your files stay on your device</h2>
+              <p className="text-slate-600 text-sm leading-relaxed">Your images are processed in your browser and downloaded to your device. Learn more in our <Link href="/privacy-policy/" className="underline underline-offset-4">privacy policy</Link>.</p>
             </div>
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <Zap className="size-7 text-amber-600 mb-3" aria-hidden="true" /><h2 className="text-lg font-bold mb-2">Powered by your browser</h2>
+              <p className="text-slate-600 text-sm leading-relaxed">Processing time and image limits depend on your device. Cached tools may work offline; AI features need their model assets downloaded first.</p>
+            </div>
+          </section>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold tracking-tight">Frequently asked questions</h2>
+            <div className="divide-y divide-slate-200">{faqs.map(faq => <details key={faq.question} className="py-4 group"><summary className="cursor-pointer font-semibold text-slate-900 py-1">{faq.question}</summary><p className="pt-3 text-slate-600 leading-relaxed">{faq.answer}</p></details>)}</div>
+          </section>
         </div>
-
+        <aside className="lg:col-span-4">
+          <div className="bg-slate-50 rounded-3xl p-6 border border-slate-200 space-y-4">
+            <h2 className="font-bold text-slate-900 flex items-center gap-2"><Sparkles className="size-5 text-purple-600" aria-hidden="true" />Related image tools</h2>
+            {relatedTools.map(related => <Link key={related.id} href={related.href} className="block p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-400 transition-colors"><h3 className="font-semibold text-slate-900">{related.title}</h3><p className="text-sm text-slate-600 mt-1">{related.description}</p></Link>)}
+            <Link href="/tools/" className="inline-flex items-center gap-2 py-3 font-semibold text-sm">View all image tools<ArrowRight className="size-4" aria-hidden="true" /></Link>
+          </div>
+        </aside>
       </div>
     </div>
   );

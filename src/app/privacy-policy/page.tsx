@@ -3,15 +3,15 @@ import { ArrowLeft, Lock, Shield, WifiOff, Zap } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = constructMetadata({
-  title: "Privacy Policy - img0.site",
-  description: "Learn how img0.site processes your images locally in your browser using WebAssembly. No data uploads, 100% private.",
+  title: "Privacy Policy",
+  description: "Learn how img0 processes image files locally in your browser, how anonymous usage analytics work, and what offline use requires.",
   canonical: "/privacy-policy",
 });
 
 export default function PrivacyPolicy() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 space-y-12 font-sans">
-      
+
       {/* Header */}
       <div className="space-y-6 text-center">
         <Link 
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-          We believe your photos are yours alone. That's why we built img0.site to be completely offline-capable and local-first.
+          We believe your photos are yours alone. That is why img0.site processes your images on your device.
         </p>
       </div>
 
@@ -34,10 +34,10 @@ export default function PrivacyPolicy() {
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
           <Shield className="w-64 h-64 text-slate-900" />
         </div>
-        
+
         <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
           <Shield className="w-6 h-6 text-emerald-600" />
-          The "Zero Upload" Promise
+          The &quot;Zero Upload&quot; Promise
         </h2>
         <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed">
           <p>
@@ -45,21 +45,21 @@ export default function PrivacyPolicy() {
             All image processing happens directly inside your web browser using advanced technologies like <strong>WebAssembly (Wasm)</strong> and HTML5 Canvas.
           </p>
           <p className="mt-4">
-            When you select a file, it stays on your device. It is processed in your device's memory (RAM), and the result is saved directly to your downloads info. 
+            When you select a file, it stays on your device. It is processed in your device&apos;s memory (RAM), and the result is saved directly to your downloads folder.
             No cloud servers ever touch your images. This means:
           </p>
           <ul className="grid md:grid-cols-2 gap-4 list-none pl-0 mt-6">
              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <WifiOff className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-                <span><strong>No Internet Needed:</strong> Once the page works, you can turn off Wi-Fi and it still works.</span>
+                <span><strong>Offline availability:</strong> Previously cached tools may work offline. AI tools require an initial model download. Availability depends on cached assets and your browser.</span>
              </li>
              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <Lock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Zero Data Leaks:</strong> Your sensitive documents never leave your computer.</span>
+                <span><strong>No Image Uploads:</strong> Your sensitive documents never leave your computer.</span>
              </li>
              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <Zap className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <span><strong>Instant Speed:</strong> No upload or download wait times. It uses your CPU/GPU power.</span>
+                <span><strong>Local Processing:</strong> Processing speed depends on your device, image size, and available memory.</span>
              </li>
           </ul>
         </div>
@@ -70,7 +70,7 @@ export default function PrivacyPolicy() {
         <section>
           <h3 className="text-xl font-bold mb-3 text-slate-900">What data do we collect?</h3>
           <p>
-            We use privacy-friendly analytics (like Vercel Analytics or plausible.io) to track <strong>anonymous usage trends</strong> (e.g., "how many people used the image tools today"). 
+            We use Vercel Analytics to understand <strong>anonymous site usage trends</strong>, such as page visits. Loading the site and AI models makes network requests; image processing happens locally.
             We do NOT and CANNOT track:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-600">
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
         <section>
             <h3 className="text-xl font-bold mb-3 text-slate-900">Contact Us</h3>
             <p>
-                If you have questions about IMG0 feel free to reach out  Twitter.
+                If you have questions about img0, contact us on Twitter/X.
             </p>
         </section>
       </div>

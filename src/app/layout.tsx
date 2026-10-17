@@ -1,5 +1,8 @@
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { constructMetadata } from "@/components/SEO";
+import { siteConfig } from "@/config/site";
+import { generateOrganizationSchema, generateWebsiteSchema } from "@/lib/schema";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -21,12 +24,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://img0.site"),
-  title: {
-    default: "img0 (image0) | Instant Image Tools. Purely Local & Private.",
-    template: "%s | img0.site",
-  },
-  description: "img0 (image0): Free, private, and 100% client-side image tools. Process images purely in your browser memory without any uploads. Offline capable.",
+  ...constructMetadata({
+    title: 'Free Online Image Tools — No Uploads',
+    description: siteConfig.description,
+    canonical: '/',
+  }),
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -37,31 +39,7 @@ export const metadata: Metadata = {
     icon: "/insert-picture-icon.png",
     apple: "/insert-picture-icon.png", // Add apple icon too if possible, reusing the distinct icon
   },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://img0.site",
-    title: "img0 (image0) | Instant Image Tools. Purely Local & Private.",
-    description: "img0 (image0): Zero uploads. 100% Privacy. Process images directly in your browser.",
-    siteName: "img0.site",
-    images: [
-      {
-        url: "/OG-img0.png",
-        width: 1200,
-        height: 630,
-        alt: "img0.site - Private Browser-Based Tools",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "img0 (image0) | Instant Image Tools. Purely Local & Private.",
-    description: "img0 (image0): Zero uploads. 100% Privacy. Free browser-based image utilities.",
-    images: ["/OG-img0.png"],
-  },
-  alternates: {
-    canonical: "./",
-  },
+
 };
 
 import { PwaRegister } from "@/components/PwaRegister";
@@ -76,6 +54,10 @@ export default function RootLayout({
       <body
         className={`bg-white text-slate-900 antialiased selection:bg-slate-900 selection:text-white overflow-x-hidden`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([generateOrganizationSchema(), generateWebsiteSchema()]).replace(/</g, '\\u003c') }}
+        />
         <PwaRegister />
         <div className="flex flex-col min-h-screen">
           <Navbar />

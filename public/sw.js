@@ -1,4 +1,4 @@
-const CACHE_NAME = "img0-v1";
+const CACHE_NAME = "img0-v2-seo";
 // We include both versions to be safe with how different static hosts serve files
 const URLS_TO_CACHE = [
     "/",

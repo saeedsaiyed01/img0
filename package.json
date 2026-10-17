@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",

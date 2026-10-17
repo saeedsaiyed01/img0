@@ -31,7 +31,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-base64",
     title: "Image to Base64",
-    description: "For developers who need to turn images into code.",
+    description: "Encode an image as a Base64 data URL and copy it for HTML or CSS.",
     icon: FileCode,
     href: "/tools/image-to-base64",
     component: "Base64Tool",
@@ -42,7 +42,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-png",
     title: "Image to PNG",
-    description: "Turn any image into a high-quality PNG file.",
+    description: "Convert browser-supported images to PNG locally.",
     icon: FileImage,
     href: "/tools/image-to-png",
     component: "FormatConverter",
@@ -52,7 +52,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-jpg",
     title: "Image to JPG",
-    description: "Make images smaller and faster to load.",
+    description: "Convert a browser-supported image to JPG with a white background.",
     icon: FileImage,
     href: "/tools/image-to-jpg",
     component: "FormatConverter",
@@ -62,7 +62,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-webp",
     title: "Image to WebP",
-    description: "The modern web format for websites.",
+    description: "Convert images to WebP with adjustable quality.",
     icon: FileImage,
     href: "/tools/image-to-webp",
     component: "FormatConverter",
@@ -71,7 +71,7 @@ export const tools: ToolConfig[] = [
   },
   {
     id: "image-to-ico",
-    title: "Image to Icon",
+    title: "Image to ICO",
     description: "Create small icons for browser tabs.",
     icon: Image,
     href: "/tools/image-to-ico",
@@ -83,7 +83,7 @@ export const tools: ToolConfig[] = [
   // PDF Tool
   {
     id: "image-to-pdf",
-    title: "Turn Images into PDF",
+    title: "Images to PDF",
     description: "Combine your photos into a single PDF document.",
     icon: FileText,
     href: "/tools/image-to-pdf",
@@ -94,8 +94,8 @@ export const tools: ToolConfig[] = [
   // Favicon Generator
   {
     id: "favicon-generator",
-    title: "Make App Icons",
-    description: "Create all the icons you need for a new website or app.",
+    title: "Favicon Generator",
+    description: "Generate PNG favicon sizes and a web manifest ZIP.",
     icon: MonitorSmartphone,
     href: "/tools/favicon-generator",
     component: "FaviconTool",
@@ -105,8 +105,8 @@ export const tools: ToolConfig[] = [
   // SVG to JSX
   {
     id: "svg-to-jsx",
-    title: "SVG to Code",
-    description: "Turn SVG icons into React component code.",
+    title: "SVG to JSX Converter",
+    description: "Convert an SVG file to JSX-compatible markup for React.",
     icon: Code2,
     href: "/tools/svg-to-jsx",
     component: "SvgToJsxTool",
@@ -116,7 +116,7 @@ export const tools: ToolConfig[] = [
   // Editor Tools
   {
     id: "crop-image",
-    title: "Cut & Crop",
+    title: "Crop Image",
     description: "Trim your images to the perfect size.",
     icon: Scissors,
     href: "/tools/crop-image",
@@ -134,7 +134,7 @@ export const tools: ToolConfig[] = [
     props: { mode: "rotate" },
     category: "editor",
   },
-  
+
   // Magic Tools
   {
     id: "remove-background",
@@ -169,7 +169,7 @@ export const tools: ToolConfig[] = [
   {
     id: "compress-image",
     title: "Compress Image",
-    description: "Reduce file size while keeping quality high.",
+    description: "Compare JPG, PNG, and WebP output sizes with local processing.",
     icon: Minimize2,
     href: "/tools/compress-image",
     component: "CompressorTool",
@@ -180,7 +180,7 @@ export const tools: ToolConfig[] = [
   {
     id: "social-resize",
     title: "Social Media Resize",
-    description: "Instantly resize for Instagram, YouTube, Twitter & more.",
+    description: "Create center-cropped images using social media size presets.",
     icon: LayoutGrid,
     href: "/tools/social-resize",
     component: "SocialResizeTool",
@@ -201,9 +201,9 @@ export const tools: ToolConfig[] = [
 
 export const CATEGORY_THEMES: Record<ToolCategory, { bg: string; text: string; icon: string }> = {
   convert: {
-    bg: "bg-blue-50 hover:bg-blue-100", 
+    bg: "bg-blue-50 hover:bg-blue-100",
     text: "text-blue-900",
-    icon: "bg-blue-100 text-blue-600" 
+    icon: "bg-blue-100 text-blue-600"
   },
   pdf: {
     bg: "bg-rose-50 hover:bg-rose-100",
