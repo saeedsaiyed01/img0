@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { canonicalUrl as resolveCanonicalUrl, siteConfig } from '@/config/site';
 
 interface SEOProps {
   title: string;
@@ -13,7 +14,7 @@ interface SEOProps {
 export function constructMetadata({
   title,
   description,
-  url = "https://img0.site",
+  url = siteConfig.url,
   image = "/OG-img0.png",
   keywords = [
     "image0",
@@ -34,10 +35,10 @@ export function constructMetadata({
 }: SEOProps): Metadata {
   
   const fullTitle = title.includes("img0.site") ? title : `${title} | img0.site`;
-  const canonicalUrl = canonical || (url.startsWith('http') ? url : `https://img0.site${url}`);
+  const canonicalUrl = resolveCanonicalUrl(canonical || url);
 
   return {
-    title: fullTitle,
+    title: { absolute: fullTitle },
     description,
     keywords,
     openGraph: {
@@ -73,6 +74,6 @@ export function constructMetadata({
         follow: !noIndex,
       },
     },
-    metadataBase: new URL("https://img0.site"),
+    metadataBase: new URL(siteConfig.url),
   };
 }

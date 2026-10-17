@@ -35,7 +35,7 @@ export default function ToolsPage() {
           </h1>
           <p className="max-w-2xl mx-auto text-xl text-slate-500 tracking-tight font-medium">
             A unified collection of professional-grade, browser-based utilities. <br className="hidden md:block" />
-            Zero server interaction. Total data privacy.
+            Your image files stay on your device. No image uploads.
           </p>
         </div>
 
@@ -88,7 +88,7 @@ export default function ToolsPage() {
           </div>
           <div className="space-y-2">
             <h3 className="text-2xl font-bold text-slate-900">No tools found</h3>
-            <p className="text-slate-500">We couldn't find any tool matching "{searchQuery}"</p>
+            <p className="text-slate-500">We could not find any tool matching &quot;{searchQuery}&quot;</p>
           </div>
           <motion.button 
             whileTap={{ scale: 0.95 }}
