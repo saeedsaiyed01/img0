@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { removeBackground } from "@imgly/background-removal";
 import { saveAs } from "file-saver";
@@ -26,7 +27,7 @@ export function BlurBackgroundTool() {
     try {
       const imageUrl = URL.createObjectURL(file);
       const foregroundBlob = await removeBackground(imageUrl);
-      
+
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas not supported");
@@ -94,17 +95,17 @@ export function BlurBackgroundTool() {
           onFileSelect={handleFileSelect}
           title="Upload image to blur background"
           description="AI-powered background blur, 100% in your browser"
-          className="h-[400px] bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200"
+          className="bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200 min-h-64 md:min-h-72"
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-300">
-   
+
           <div className="lg:col-span-2 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div className="space-y-2">
                     <span className="text-xs font-bold text-slate-400 uppercase">Original</span>
-                    <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm aspect-square relative">
-          
+                    <div className="rounded-2xl overflow-hidden border border-slate-300 bg-white shadow-sm aspect-square relative">
+
                         <img
                         src={URL.createObjectURL(originalFile)}
                         alt="Original"
@@ -115,7 +116,7 @@ export function BlurBackgroundTool() {
 
                 <div className="space-y-2">
                     <span className="text-xs font-bold text-slate-400 uppercase">Blurred</span>
-                    <div className="rounded-2xl overflow-hidden border-2 border-slate-100 bg-white shadow-sm aspect-square relative">
+                    <div className="rounded-2xl overflow-hidden border-2 border-slate-300 bg-white shadow-sm aspect-square relative">
                          {isProcessing ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm p-6 text-center z-10">
                             <Loader2 className="size-10 animate-spin text-cyan-600 mb-3" />
@@ -135,9 +136,9 @@ export function BlurBackgroundTool() {
 
           {/* Control Panel (Right - 33%) */}
           <div className="space-y-6">
-            <div className="space-y-2 sticky top-8">
-                <span className="text-xs font-bold text-slate-400 uppercase">Configuration</span>
-                <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="space-y-2 lg:sticky lg:top-24">
+
+                <div className="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm space-y-6">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                      <h2 className="text-lg font-bold text-slate-900">Configuration</h2>
                 </div>
@@ -152,6 +153,7 @@ export function BlurBackgroundTool() {
                     </div>
                     <input
                         type="range"
+                        aria-label="Blur intensity"
                         min="5"
                         max="50"
                         value={blurAmount}
@@ -161,8 +163,8 @@ export function BlurBackgroundTool() {
                     />
                 </div>
 
-                <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
-                    <div className="flex flex-col gap-3 lg:space-y-3">
+                <ToolActionBar>
+                    <div className="flex flex-col gap-3">
                          <motion.button
                             whileTap={{ scale: 0.95 }}
                             onClick={handleDownload}
@@ -172,7 +174,7 @@ export function BlurBackgroundTool() {
                             {isProcessing ? <Loader2 className="size-5 animate-spin"/> : <Download className="size-5" />}
                             Download PNG
                         </motion.button>
-    
+
                         <motion.button
                             whileTap={{ scale: 0.95 }}
                             onClick={() => {
@@ -182,10 +184,10 @@ export function BlurBackgroundTool() {
                             className="w-full h-12 bg-white border-2 border-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-200 transition-colors flex items-center justify-center gap-2"
                             >
                             <RefreshCw className="size-4" />
-                            Reset Algorithm
+                            Choose a new image
                         </motion.button>
                     </div>
-                </div>
+                </ToolActionBar>
             </div>
             </div>
           </div>

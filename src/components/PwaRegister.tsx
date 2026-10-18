@@ -1,26 +1,19 @@
-  "use client";
+"use client";
 
 import { useEffect } from "react";
 
 export function PwaRegister() {
   useEffect(() => {
-    if ("serviceWorker" in navigator && window.location.protocol === "https:") {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/sw.js")
-          .then((registration) => {
-            // console.log("SW registered: ", registration);
-          })
-          .catch((registrationError) => {
-            console.log("SW registration failed: ", registrationError);
-          });
+    // Development assets change on every edit; caching them hides local changes.
+    if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator) || !window.isSecureContext) return;
+    const register = () => {
+      navigator.serviceWorker.register("/sw.js").catch((error) => {
+        console.error("Offline support could not be initialized:", error);
       });
-    }
-    // Also allow localhost for testing
-    if ("serviceWorker" in navigator && window.location.hostname === "localhost") {
-       navigator.serviceWorker.register("/sw.js");
-    }
+    };
+    if (document.readyState === "complete") register();
+    else window.addEventListener("load", register, { once: true });
+    return () => window.removeEventListener("load", register);
   }, []);
-
   return null;
 }

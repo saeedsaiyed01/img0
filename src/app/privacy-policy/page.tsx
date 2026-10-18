@@ -11,7 +11,7 @@ export const metadata = constructMetadata({
 export default function PrivacyPolicy() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 space-y-12 font-sans">
-
+      
       {/* Header */}
       <div className="space-y-6 text-center">
         <Link 
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
           <Shield className="w-64 h-64 text-slate-900" />
         </div>
-
+        
         <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
           <Shield className="w-6 h-6 text-emerald-600" />
           The &quot;Zero Upload&quot; Promise
@@ -51,15 +51,15 @@ export default function PrivacyPolicy() {
           <ul className="grid md:grid-cols-2 gap-4 list-none pl-0 mt-6">
              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <WifiOff className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-                <span><strong>Offline availability:</strong> Previously cached tools may work offline. AI tools require an initial model download. Availability depends on cached assets and your browser.</span>
+                <span><strong>Offline use:</strong> Previously cached tools may work offline. AI tools require an initial model download. Availability depends on cached assets and your browser.</span>
              </li>
              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <Lock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>No Image Uploads:</strong> Your sensitive documents never leave your computer.</span>
+                <span><strong>No image uploads:</strong> Your sensitive documents never leave your computer.</span>
              </li>
              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <Zap className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <span><strong>Local Processing:</strong> Processing speed depends on your device, image size, and available memory.</span>
+                <span><strong>On-device processing:</strong> Speed and image capacity depend on your device and browser.</span>
              </li>
           </ul>
         </div>
@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
           <h3 className="text-xl font-bold mb-3 text-slate-900">What data do we collect?</h3>
           <p>
             We use Vercel Analytics to understand <strong>anonymous site usage trends</strong>, such as page visits. Loading the site and AI models makes network requests; image processing happens locally.
-            We do NOT and CANNOT track:
+            Image contents and file names are not sent to analytics. Our analytics are not configured to collect:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-600">
             <li>The content of your images or files.</li>
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
         <section>
             <h3 className="text-xl font-bold mb-3 text-slate-900">Contact Us</h3>
             <p>
-                If you have questions about img0, contact us on Twitter/X.
+                For questions about img0, contact <Link href="https://x.com/saeedsaiyedtwt" className="underline underline-offset-4">Saeed on X</Link>.
             </p>
         </section>
       </div>

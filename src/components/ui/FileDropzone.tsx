@@ -1,211 +1,82 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { File as FileIcon, UploadCloud } from "lucide-react"; // Import renamed File icon
-import { useCallback, useState } from "react";
+import { File as FileIcon, Upload, X } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 
 interface FileDropzoneProps extends Omit<DropzoneOptions, "onDrop"> {
   onFileSelect?: (file: File) => void;
   onFilesSelect?: (files: File[]) => void;
   className?: string;
-  accept?: Record<string, string[]>;
   title?: string;
   description?: string;
-  multiple?: boolean;
   disablePreview?: boolean;
+  compact?: boolean;
 }
 
-export function FileDropzone({
-  onFileSelect,
-  onFilesSelect,
-  className,
-  accept = { "image/*": [] },
-  title = "Upload an image",
-  description = "Drag & drop or click to upload",
-  multiple = false,
-  disablePreview = false,
-  ...props
+export function FileDropzone({ onFileSelect, onFilesSelect, className,
+  accept = { "image/*": [] }, title = "Choose an image", description = "Drag an image here or choose a file from your device.",
+  multiple = false, disablePreview = false, compact = false, disabled = false, onDropRejected, ...props
 }: FileDropzoneProps) {
-  const [files, setFiles] = useState<File[]>([]);
+  const [items, setItems] = useState<{ file: File; url: string }[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const urls = useRef<string[]>([]);
+  const descriptionId = useId();
+  const errorId = useId();
+  useEffect(() => () => urls.current.forEach((url) => URL.revokeObjectURL(url)), []);
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles && acceptedFiles.length > 0) {
-        if (multiple) {
-          if (disablePreview) {
-            onFilesSelect?.(acceptedFiles);
-            setFiles([]);
-          } else {
-            setFiles(acceptedFiles);
-            onFilesSelect?.(acceptedFiles);
-          }
-        } else {
-          setFiles([acceptedFiles[0]]);
-          onFileSelect?.(acceptedFiles[0]);
-        }
-      }
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+    ...props, accept, multiple, disabled, maxFiles: multiple ? props.maxFiles : 1,
+    noClick: true, noKeyboard: true,
+    onDrop: (accepted, rejected) => {
+      setError(rejected.length ? rejected.some((entry) => entry.errors.some((error) => error.code === "too-many-files"))
+        ? `Choose ${multiple ? "fewer files" : "one image at a time"}.`
+        : "Some files could not be accepted. Check the supported formats and try again." : null);
+      if (!accepted.length) return;
+      urls.current.forEach((url) => URL.revokeObjectURL(url));
+      const selected = multiple ? accepted : accepted.slice(0, 1);
+      const next = disablePreview ? [] : selected.map((file) => ({ file, url: file.type.startsWith("image/") ? URL.createObjectURL(file) : "" }));
+      urls.current = next.map((item) => item.url).filter(Boolean);
+      setItems(next);
+      if (multiple) onFilesSelect?.(selected);
+      else onFileSelect?.(selected[0]);
     },
-    [multiple, disablePreview, onFileSelect, onFilesSelect]
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    maxFiles: multiple ? undefined : 1,
-    multiple,
-    accept,
-    ...props,
+    onDropRejected,
   });
 
-  const clearFile = (index: number) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const newFiles = files.filter((_, i) => i !== index);
-    setFiles(newFiles);
-    if (multiple) {
-      onFilesSelect?.(newFiles);
-    }
-  };
+  function remove(index: number) {
+    const removed = items[index];
+    if (removed.url) URL.revokeObjectURL(removed.url);
+    urls.current = urls.current.filter((url) => url !== removed.url);
+    const next = items.filter((_, itemIndex) => itemIndex !== index);
+    setItems(next);
+    onFilesSelect?.(next.map((item) => item.file));
+  }
 
-  return (
-    <div
-      {...getRootProps()}
-      className={cn(
-        "relative group flex flex-col items-center justify-center w-full min-h-[350px] rounded-3xl border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden font-sans",
-        isDragActive
-          ? "border-blue-400 bg-blue-50 scale-[0.99]"
-          : "border-slate-300 hover:border-slate-400 bg-slate-50/50 hover:bg-slate-50",
-        files.length > 0 ? "border-solid border-slate-200 bg-slate-50/30 p-0" : "", // Remove padding when file is loaded to let footer flush
-        className
-      )}
-    >
-      <input {...getInputProps()} />
-
-      {files.length > 0 ? (
-        multiple ? (
-          // Multi-file grid view
-          <div className="w-full h-full flex flex-col animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 p-6 overflow-auto">
-              {files.map((file, index) => (
-                <div key={index} className="relative group">
-                  <div className="aspect-square rounded-lg overflow-hidden border-2 border-slate-200 bg-white shadow-sm">
-                    {file.type.startsWith("image/") ? (
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={file.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-slate-50">
-                        <FileIcon className="size-12 text-slate-400" />
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    onClick={clearFile(index)}
-                    className="absolute -top-2 -right-2 size-6 rounded-full bg-red-500 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                  >
-                    ✕
-                  </button>
-                  <p className="mt-1.5 text-xs font-medium text-slate-600 truncate">{file.name}</p>
-                </div>
-              ))}
-            </div>
-            <div className="w-full bg-white border-t border-slate-200 p-4 flex items-center justify-between gap-4 mt-auto">
-              <div className="text-sm font-semibold text-slate-700">
-                {files.length} file{files.length !== 1 ? 's' : ''} selected
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFiles([]);
-                  onFilesSelect?.([]);
-                }}
-                className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold uppercase tracking-wide text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-              >
-                Clear All
-              </button>
-            </div>
-          </div>
-        ) : (
-          // Single file view
-          <div className="w-full h-full flex flex-col animate-in fade-in zoom-in-95 duration-200">
-            {/* Image Preview Area */}
-            <div className="flex-1 flex items-center justify-center p-8 min-h-[200px]">
-              {files[0].type.startsWith("image/") ? (
-                <img
-                  src={URL.createObjectURL(files[0])}
-                  alt="Preview"
-                  className="max-w-full max-h-[240px] w-auto h-auto object-contain rounded-lg shadow-sm bg-white"
-                />
-              ) : (
-                <div className="size-24 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm">
-                  <FileIcon className="size-10 text-slate-400" />
-                </div>
-              )}
-            </div>
-
-            {/* Footer Info Bar */}
-            <div className="w-full bg-white border-t border-slate-200 p-4 flex items-center justify-between gap-4 mt-auto">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="size-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
-                  {files[0].type.startsWith("image/") ? (
-                    <img
-                      src={URL.createObjectURL(files[0])}
-                      className="size-full object-cover rounded-lg opacity-80"
-                      alt=""
-                    />
-                  ) : (
-                    <FileIcon className="size-5 text-slate-500" />
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <p className="font-semibold text-sm text-slate-900 truncate max-w-[150px] md:max-w-[200px]">
-                    {files[0].name}
-                  </p>
-                  <p className="text-xs text-slate-500 font-medium">
-                    {(files[0].size / 1024).toFixed(0)} KB
-                  </p>
-                </div>
-              </div>
-
-              <div className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold uppercase tracking-wide text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">
-                Replace
-              </div>
-            </div>
-          </div>
-        )
-      ) : (
-        <div className="flex flex-col items-center text-center p-8 space-y-6">
-          <div
-            className={cn(
-              "p-6 rounded-2xl bg-white shadow-sm border border-slate-200 transition-transform duration-300",
-              isDragActive ? "scale-110 rotate-3" : "group-hover:scale-110 group-hover:-rotate-3"
-            )}
-          >
-            <UploadCloud
-              className={cn(
-                "size-10 transition-colors duration-300",
-                isDragActive ? "text-blue-500" : "text-slate-400 group-hover:text-blue-500"
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-xl font-bold text-slate-900">
-              {isDragActive ? "Drop it here!" : title}
-            </h3>
-            <p className="text-base text-slate-500 max-w-xs mx-auto leading-relaxed">
-              {description}
-            </p>
-          </div>
-
-          <div className="px-4 py-1.5 rounded-full bg-slate-100/50 text-xs font-semibold text-slate-400 uppercase tracking-widest">
-            Supports Drag & Drop
-          </div>
-        </div>
-      )}
-      {files.length === 0 && (
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-      )}
+  return <div className="space-y-3">
+    <p id={descriptionId} className="sr-only">{description}</p>
+    <div {...getRootProps({ role: "group", "aria-label": title, "aria-describedby": `${descriptionId}${error ? ` ${errorId}` : ""}` })}
+      className={cn("flex min-h-64 flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-colors", isDragActive ? "border-blue-500 bg-blue-50" : "border-slate-300 bg-slate-50", disabled && "opacity-60", className, compact && "min-h-0 md:min-h-0 h-auto p-4 text-left")}>
+      <input {...getInputProps({ "aria-label": multiple ? "Choose images" : "Choose image" })} />
+      {items.length ? <div className="w-full space-y-4">
+        {multiple ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{items.map(({ file, url }, index) => <div key={`${file.name}-${index}`} className="relative rounded-xl border border-slate-200 bg-white p-3">
+          {url ? <img src={url} alt={file.name} className="aspect-square w-full rounded-lg object-contain" /> : <FileIcon className="mx-auto my-8 size-10 text-slate-500" />}
+          <button type="button" aria-label={`Remove ${file.name}`} disabled={disabled} onClick={() => remove(index)} className="absolute right-1 top-1 flex size-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-red-50"><X className="size-4" /></button>
+          <p className="mt-2 truncate text-xs text-slate-600">{file.name}</p>
+        </div>)}</div> : <>
+          {items[0].url ? <img src={items[0].url} alt="Selected image" className="mx-auto max-h-56 max-w-full rounded-lg object-contain" /> : <FileIcon className="mx-auto size-12 text-slate-500" />}
+          <p className="truncate text-sm font-medium text-slate-800">{items[0].file.name}</p>
+        </>}
+        <button type="button" disabled={disabled} onClick={open} className="min-h-11 rounded-lg border border-slate-300 bg-white px-5 py-2 text-sm font-semibold disabled:cursor-not-allowed">Replace{multiple ? " images" : " image"}</button>
+      </div> : <div className={compact ? "flex w-full flex-wrap items-center justify-between gap-3" : "flex flex-col items-center"}>
+        {!compact && <Upload className="mb-4 size-8 text-slate-500" aria-hidden="true" />}
+        <div><h2 className={compact ? "text-sm font-semibold text-slate-900" : "text-lg font-semibold text-slate-900"}>{isDragActive ? "Drop your image here" : title}</h2>
+        <p className={cn("max-w-sm text-sm leading-relaxed text-slate-600", compact ? "mt-1" : "mt-2")}>{description}</p></div>
+        <button type="button" disabled={disabled} onClick={open} className={cn("min-h-11 rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed", !compact && "mt-5")}>{multiple ? "Choose images" : "Choose image"}</button>
+        {!compact && <p className="mt-3 text-xs text-slate-500">Files stay on your device</p>}
+      </div>}
     </div>
-  );
+    {error && <p id={errorId} role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+  </div>;
 }

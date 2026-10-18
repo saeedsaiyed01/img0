@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { Check, Copy, FileText } from "lucide-react";
 import { motion } from "motion/react";
@@ -21,15 +22,20 @@ export function Base64Tool() {
     reader.readAsDataURL(file);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(base64);
-    setCopied(true);
-    toast.success("Copied to clipboard!");
-    setTimeout(() => setCopied(false), 2000);
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(base64);
+      setCopied(true);
+      toast.success("Copied to clipboard!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+      toast.error("Could not copy. Select the output and copy it manually.");
+    }
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8 font-sans">
+    <div className="w-full max-w-7xl mx-auto space-y-6 font-sans">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Workspace */}
           <div className="lg:col-span-2 space-y-4">
@@ -38,13 +44,13 @@ export function Base64Tool() {
                 accept={{'image/*': []}} 
                 title="Upload Image to Convert"
                 description="Drag & drop or click to upload"
-                className="h-[500px] bg-slate-50 border-slate-200 rounded-3xl"
+                className="bg-slate-50 border-slate-200 rounded-3xl min-h-64 md:min-h-72"
             />
           </div>
 
           {/* Control Panel  */}
           <div className="space-y-6">
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
+            <div className="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm space-y-6 lg:sticky lg:top-24">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                      <h2 className="text-lg font-bold text-slate-900">Output</h2>
                      <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">Base64</span>
@@ -53,9 +59,7 @@ export function Base64Tool() {
                 {base64 ? (
                     <div className="space-y-4 animate-in fade-in duration-300">
                          <div className="relative group">
-                            <pre className="w-full h-[400px] p-4 font-mono text-[10px] bg-slate-900 text-slate-300 rounded-xl overflow-auto border border-slate-800 shadow-inner custom-scrollbar whitespace-pre-wrap break-all">
-                                {base64}
-                            </pre>
+                            <textarea readOnly aria-label="Base64 output" spellCheck={false} value={base64} className="w-full h-64 p-4 font-mono text-xs bg-slate-900 text-slate-300 rounded-xl overflow-auto border border-slate-800 shadow-inner custom-scrollbar whitespace-pre-wrap break-all resize-y min-h-40" />
                              <button
                                 onClick={copyToClipboard}
                                 className="absolute top-2 right-2 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm transition-all shadow-sm"
@@ -64,7 +68,7 @@ export function Base64Tool() {
                                 {copied ? <Check className="size-4 text-emerald-400" /> : <Copy className="size-4" />}
                             </button>
                          </div>
-                         <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+                         <ToolActionBar>
                             <motion.button
                                 whileTap={{ scale: 0.95 }}
                                 onClick={copyToClipboard}
@@ -73,10 +77,10 @@ export function Base64Tool() {
                                 {copied ? <Check className="size-5 text-emerald-400" /> : <Copy className="size-5" />}
                                 {copied ? "Copied!" : "Copy Base64"}
                             </motion.button>
-                         </div>
+                         </ToolActionBar>
                          
                          <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-800 leading-relaxed">
-                            <strong>Usage:</strong> Use directly in <code>&lt;img src="..." /&gt;</code> or CSS <code>background-image</code>.
+                            <strong>Usage:</strong> Use directly in <code>&lt;img src=&quot;...&quot; /&gt;</code> or CSS <code>background-image</code>.
                         </div>
                     </div>
                 ) : (

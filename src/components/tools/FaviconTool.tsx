@@ -1,13 +1,15 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import { Archive, LayoutGrid, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { canvasBlob, iconCanvas, loadImage, pngToIco, IMAGE_INPUT_TYPES } from "@/lib/image-export";
 
 const SIZES = [
   { size: 16, name: "favicon-16x16.png" },
@@ -20,40 +22,16 @@ const SIZES = [
 export default function FaviconTool() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    }
-  }, [file]);
-
   const generatePackage = async () => {
-    if (!file || !previewUrl) return;
+    if (!file || isProcessing) return;
+    const imageUrl = URL.createObjectURL(file);
     setIsProcessing(true);
 
     try {
       const zip = new JSZip();
-      const img = new Image();
-      img.src = previewUrl;
-
-      await new Promise((resolve) => {
-        img.onload = resolve;
-      });
-
-      // Generate all sizes
+      const img = await loadImage(imageUrl);
       for (const { size, name } of SIZES) {
-        const canvas = document.createElement("canvas");
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, size, size);
-          const blob = await new Promise<Blob | null>(r => canvas.toBlob(r, "image/png"));
-          if (blob) zip.file(name, blob);
-        }
+        zip.file(name, await canvasBlob(iconCanvas(img, size), "image/png"));
       }
 
       // Add manifest.json
@@ -70,25 +48,17 @@ export default function FaviconTool() {
       };
       zip.file("site.webmanifest", JSON.stringify(manifest, null, 2));
 
-      // Add ico (using 32x32 as simple conversion)
-      const icoCanvas = document.createElement("canvas");
-      icoCanvas.width = 32;
-      icoCanvas.height = 32;
-      const ctx = icoCanvas.getContext("2d");
-      if (ctx) {
-          ctx.drawImage(img, 0, 0, 32, 32);
-          // Save 32x32 PNG as .ico for basic compatibility
-          const blob = await new Promise<Blob | null>(r => icoCanvas.toBlob(r, "image/x-icon"));
-          if (blob) zip.file("favicon.ico", blob);
-      }
-      
+      const png = await canvasBlob(iconCanvas(img, 32), "image/png");
+      zip.file("favicon.ico", pngToIco(new Uint8Array(await png.arrayBuffer()), 32, 32));
+
       const content = await zip.generateAsync({ type: "blob" });
       saveAs(content, "favicon-package.zip");
       toast.success("Download started!");
 
     } catch (e) {
-      console.error("Favicon Gen failed", e);
+      toast.error(e instanceof Error ? e.message : "Could not create icons. Choose another image.");
     } finally {
+      URL.revokeObjectURL(imageUrl);
       setIsProcessing(false);
     }
   };
@@ -99,19 +69,21 @@ export default function FaviconTool() {
         
         {/* Visual Preview Grid */}
         <div className="md:col-span-2 space-y-4">
-             <div className="relative group min-h-[400px]">
+             <div className="relative group">
                 <FileDropzone
                     onFileSelect={setFile}
+                    accept={IMAGE_INPUT_TYPES}
+                    disabled={isProcessing}
                     title="Upload App Icon"
-                    description="Ideally 1024x1024 PNG"
-                    className="h-full min-h-[400px] bg-slate-50 border-slate-200"
+                    description="JPG, PNG, or WebP. Non-square images receive transparent padding."
+                    className="bg-slate-50 border-slate-200 min-h-64 md:min-h-72"
                 />
             </div>
         </div>
 
         {/* Specs & Download */}
         <div className="space-y-6">
-            <div className="border border-slate-200 bg-white p-6 shadow-sm rounded-2xl relative">
+            <div className="border border-slate-300 bg-white p-6 shadow-sm rounded-2xl relative">
                 <div className="flex items-center gap-2 pb-4 border-b border-slate-100 mb-4">
                      <div className="p-2 bg-violet-50 rounded-lg">
                         <LayoutGrid className="w-5 h-5 text-violet-600" />
@@ -130,12 +102,12 @@ export default function FaviconTool() {
                     ))}
                     <div className="border border-slate-100 bg-slate-50 p-2 rounded-lg flex items-center gap-2 text-slate-400">
                          <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
-                        + Manifest.json
+                        + site.webmanifest & ICO
                     </div>
                 </div>
             </div>
 
-            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+            <ToolActionBar visible={Boolean(file)}>
                 <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={generatePackage}
@@ -154,7 +126,7 @@ export default function FaviconTool() {
                     )}
                     {isProcessing ? "Bundling..." : "Download ZIP Package"}
                 </motion.button>
-            </div>
+            </ToolActionBar>
         </div>
       </div>
     </div>

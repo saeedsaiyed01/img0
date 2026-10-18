@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import "cropperjs/dist/cropper.css";
 import { saveAs } from "file-saver";
@@ -30,6 +31,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
   const cropperRef = useRef<ReactCropperElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState<number | undefined>(undefined);
   const [rotation, setRotation] = useState(0);
   const [fileName, setFileName] = useState("");
   const [scaleX, setScaleX] = useState(1);
@@ -41,6 +43,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
       setImageSrc(reader.result as string);
       setFileName(file.name.replace(/\.[^/.]+$/, ""));
       setRotation(0);
+      setAspectRatio(undefined);
       setScaleX(1);
       setScaleY(1);
     };
@@ -75,6 +78,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
   };
 
   const handleAspectRatio = (ratio: number | undefined) => {
+    setAspectRatio(ratio);
     const cropper = cropperRef.current?.cropper;
     if (cropper) {
       cropper.setAspectRatio(ratio || NaN);
@@ -92,6 +96,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
     const cropper = cropperRef.current?.cropper;
     if (cropper) {
       cropper.reset();
+      cropper.setAspectRatio(NaN);
       setRotation(0);
       setScaleX(1);
       setScaleY(1);
@@ -140,7 +145,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
               : "Upload image to rotate"
           }
           description="Crop, rotate, flip, and resize your images"
-          className="h-[400px] bg-slate-50 border-slate-200"
+          className="bg-slate-50 border-slate-200 min-h-64 md:min-h-72"
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-300">
@@ -167,7 +172,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
 
           {/* Sidebar Controls */}
           <div className="space-y-6">
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
+            <div className="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm space-y-6 lg:sticky lg:top-24">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                  <h2 className="text-lg font-bold text-slate-900">Editor Tools</h2>
                  <motion.button
@@ -226,25 +231,29 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
             {showCrop && (
               <div className="space-y-4">
                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Aspect Ratio</h3>
-                 <div className="grid grid-cols-2 gap-2">
+                 <div className="aspect-ratio-controls grid grid-cols-2 gap-2">
                     <motion.button 
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAspectRatio(undefined)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                        aria-pressed={aspectRatio === undefined}
+                        onClick={() => handleAspectRatio(undefined)} className="min-h-11 px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Maximize className="size-3.5" /> Freeform
                     </motion.button>
                     <motion.button 
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAspectRatio(1)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                        aria-pressed={aspectRatio === 1}
+                        onClick={() => handleAspectRatio(1)} className="min-h-11 px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Square className="size-3.5" /> Square (1:1)
                     </motion.button>
                     <motion.button 
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAspectRatio(16/9)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                        aria-pressed={aspectRatio === 16 / 9}
+                        onClick={() => handleAspectRatio(16/9)} className="min-h-11 px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Monitor className="size-3.5" /> 16:9
                     </motion.button>
                     <motion.button 
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAspectRatio(4/3)} className="px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                        aria-pressed={aspectRatio === 4 / 3}
+                        onClick={() => handleAspectRatio(4/3)} className="min-h-11 px-3 py-2 text-xs font-bold bg-slate-100 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
                         <Crop className="size-3.5" /> 4:3
                     </motion.button>
                  </div>
@@ -257,6 +266,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
                  <div className="flex items-center gap-2">
                     <motion.button
                         whileTap={{ scale: 0.95 }}
+                        aria-label="Zoom out"
                         onClick={() => handleZoom(-0.1)}
                         className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
                     >
@@ -264,6 +274,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
                     </motion.button>
                     <motion.button
                         whileTap={{ scale: 0.95 }}
+                        aria-label="Zoom in"
                         onClick={() => handleZoom(0.1)}
                         className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
                     >
@@ -272,7 +283,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
                  </div>
             </div>
 
-            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+            <ToolActionBar>
                 <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleDownload}
@@ -291,7 +302,7 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
                     </>
                 )}
                 </motion.button>
-            </div>
+            </ToolActionBar>
           </div>
           </div>
         </div>
@@ -299,6 +310,9 @@ export function EditorTool({ mode = "both" }: EditorToolProps) {
       
       {/* Custom Styles for Cropper to override basics */}
       <style jsx global>{`
+        .aspect-ratio-controls button[aria-pressed="true"] {
+          background: #eff6ff; color: #1d4ed8; box-shadow: inset 0 0 0 1px #93c5fd;
+        }
         .cropper-bg {
           background-image: linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
                             linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),

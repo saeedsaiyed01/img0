@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { saveAs } from "file-saver";
@@ -221,12 +222,12 @@ export function SocialResizeTool() {
           accept={{ "image/*": [".jpg", ".jpeg", ".png", ".webp"] }}
           title="Upload image to resize"
           description="We'll create versions for all major platforms"
-          className="h-80 bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-300"
+          className="bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-300 min-h-64 md:min-h-72"
         />
       ) : (
         <div className="space-y-6">
           {/* Header Bar */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-white border border-slate-300 rounded-2xl shadow-sm">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-emerald-50 rounded-lg">
                 <Check className="w-5 h-5 text-emerald-600" />
@@ -297,9 +298,10 @@ export function SocialResizeTool() {
                       </div>
                       <motion.button
                         whileTap={{ scale: 0.95 }}
+                        aria-label={`Download ${generated.preset.platform} ${generated.preset.name}`}
                         onClick={() => handleDownloadSingle(generated)}
                         disabled={downloadingId === generated.preset.id}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                        className="min-h-11 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
                       >
                         {downloadingId === generated.preset.id ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -314,7 +316,7 @@ export function SocialResizeTool() {
               </div>
 
               {/* Download All Button */}
-              <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+              <ToolActionBar>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={handleDownloadAll}
@@ -333,7 +335,7 @@ export function SocialResizeTool() {
                   )}
                   {isDownloadingAll ? "Creating ZIP..." : "Download All as ZIP"}
                 </motion.button>
-              </div>
+              </ToolActionBar>
             </>
           )}
         </div>
