@@ -138,7 +138,7 @@ export const tools: ToolConfig[] = [
     props: { mode: "rotate" },
     category: "editor",
   },
-  
+
   // Magic Tools
   {
     id: "remove-background",
@@ -206,9 +206,9 @@ export const tools: ToolConfig[] = [
 
 export const CATEGORY_THEMES: Record<ToolCategory, { bg: string; text: string; icon: string }> = {
   convert: {
-    bg: "bg-blue-50 hover:bg-blue-100", 
+    bg: "bg-blue-50 hover:bg-blue-100",
     text: "text-blue-900",
-    icon: "bg-blue-100 text-blue-600" 
+    icon: "bg-blue-100 text-blue-600"
   },
   pdf: {
     bg: "bg-rose-50 hover:bg-rose-100",

@@ -11,10 +11,10 @@ export const metadata = constructMetadata({
 export default function PrivacyPolicy() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 space-y-12 font-sans">
-      
+
       {/* Header */}
       <div className="space-y-6 text-center">
-        <Link 
+        <Link
           href="/"
           className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors"
         >
@@ -34,14 +34,14 @@ export default function PrivacyPolicy() {
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
           <Shield className="w-64 h-64 text-slate-900" />
         </div>
-        
+
         <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
           <Shield className="w-6 h-6 text-emerald-600" />
           The &quot;Zero Upload&quot; Promise
         </h2>
         <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed">
           <p>
-            Unlike most online converters, <strong>img0.site does NOT upload your files to any server</strong>. 
+            Unlike most online converters, <strong>img0.site does NOT upload your files to any server</strong>.
             All image processing happens directly inside your web browser using advanced technologies like <strong>WebAssembly (Wasm)</strong> and HTML5 Canvas.
           </p>
           <p className="mt-4">
