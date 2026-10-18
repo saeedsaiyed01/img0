@@ -24,6 +24,7 @@ export interface ToolConfig {
   component: string;
   props?: Record<string, unknown>;
   category: ToolCategory;
+  keywords?: string[];
 }
 
 export const tools: ToolConfig[] = [
@@ -42,7 +43,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-png",
     title: "Image to PNG",
-    description: "Convert browser-supported images to PNG locally.",
+    description: "Convert JPG, PNG, or WebP images to PNG in your browser.",
     icon: FileImage,
     href: "/tools/image-to-png",
     component: "FormatConverter",
@@ -51,8 +52,9 @@ export const tools: ToolConfig[] = [
   },
   {
     id: "image-to-jpg",
+    keywords: ["jpeg"],
     title: "Image to JPG",
-    description: "Convert a browser-supported image to JPG with a white background.",
+    description: "Convert images to JPG with adjustable quality and a white background.",
     icon: FileImage,
     href: "/tools/image-to-jpg",
     component: "FormatConverter",
@@ -62,7 +64,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-webp",
     title: "Image to WebP",
-    description: "Convert images to WebP with adjustable quality.",
+    description: "Convert JPG or PNG images to WebP with adjustable quality.",
     icon: FileImage,
     href: "/tools/image-to-webp",
     component: "FormatConverter",
@@ -72,7 +74,7 @@ export const tools: ToolConfig[] = [
   {
     id: "image-to-ico",
     title: "Image to ICO",
-    description: "Create small icons for browser tabs.",
+    description: "Create a 256-pixel ICO icon from a JPG, PNG, or WebP image.",
     icon: Image,
     href: "/tools/image-to-ico",
     component: "FormatConverter",
@@ -94,8 +96,9 @@ export const tools: ToolConfig[] = [
   // Favicon Generator
   {
     id: "favicon-generator",
+    keywords: ["app icon", "website icon", "browser tab", "pwa"],
     title: "Favicon Generator",
-    description: "Generate PNG favicon sizes and a web manifest ZIP.",
+    description: "Generate PNG favicon sizes, an ICO icon, and a web manifest ZIP.",
     icon: MonitorSmartphone,
     href: "/tools/favicon-generator",
     component: "FaviconTool",
@@ -105,7 +108,8 @@ export const tools: ToolConfig[] = [
   // SVG to JSX
   {
     id: "svg-to-jsx",
-    title: "SVG to JSX Converter",
+    keywords: ["react", "component", "svg to code"],
+    title: "SVG to JSX",
     description: "Convert an SVG file to JSX-compatible markup for React.",
     icon: Code2,
     href: "/tools/svg-to-jsx",
@@ -117,7 +121,7 @@ export const tools: ToolConfig[] = [
   {
     id: "crop-image",
     title: "Crop Image",
-    description: "Trim your images to the perfect size.",
+    description: "Crop a photo with a freeform selection or an aspect ratio.",
     icon: Scissors,
     href: "/tools/crop-image",
     component: "EditorTool",
@@ -127,7 +131,7 @@ export const tools: ToolConfig[] = [
   {
     id: "rotate-image",
     title: "Rotate Image",
-    description: "Spin your photos until they look right.",
+    description: "Rotate or flip a photo and download the edited PNG.",
     icon: RotateCw,
     href: "/tools/rotate-image",
     component: "EditorTool",
@@ -148,7 +152,7 @@ export const tools: ToolConfig[] = [
   {
     id: "blur-background",
     title: "Blur Background",
-    description: "Blur the background of your photo just like Portrait mode.",
+    description: "Soften a photo background using AI subject detection.",
     icon: Image,
     href: "/tools/blur-background",
     component: "BlurBackgroundTool",
@@ -168,6 +172,7 @@ export const tools: ToolConfig[] = [
   // Compression & Optimization
   {
     id: "compress-image",
+    keywords: ["reduce size", "reduce file size", "optimize", "shrink photo"],
     title: "Compress Image",
     description: "Compare JPG, PNG, and WebP output sizes with local processing.",
     icon: Minimize2,

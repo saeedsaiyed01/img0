@@ -1,88 +1,23 @@
-"use client";
-
-import { Cpu, Globe, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="bg-white border-t border-slate-100 pt-24 pb-12 font-sans">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-16 mb-20">
-          
-          {/* Brand Info */}
-          <div className="col-span-1 md:col-span-1 space-y-6">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-9 h-9 bg-white border border-slate-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform relative overflow-hidden">
-                <Image 
-                  src="/insert-picture-icon.png" 
-                  alt="IMG0" 
-                  fill
-                  className="object-contain p-1.5" 
-                />  
-              </div>
-              <span className="font-bold text-xl tracking-tighter text-slate-900 uppercase">
-                img0.site
-              </span>
-            </Link>
-            <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-           100% secure and local Image utilities designed with absolute privacy in mind. Every pixel processed locally on your machine.
-            </p>
-          </div>
-
-          {/* Column 1: Product */}
-          <div className="space-y-6">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-900">Product</h4>
-            <ul className="space-y-4 text-sm font-medium">
-              <li><Link href="/" className="text-slate-500 hover:text-slate-900 transition-colors">Home</Link></li>
-              <li><Link href="/tools" className="text-slate-500 hover:text-slate-900 transition-colors">All Tools</Link></li>
-              <li><Link href="/privacy-policy" className="text-slate-500 hover:text-slate-900 transition-colors">Privacy Policy</Link></li>
-            </ul>
-          </div>
-
-          {/* Column 2: Tools */}
-          <div className="space-y-6">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-900">Top Tools</h4>
-            <ul className="space-y-4 text-sm font-medium">
-              <li><Link href="/tools/image-to-png" className="text-slate-500 hover:text-slate-900 transition-colors">Image to PNG</Link></li>
-              <li><Link href="/tools/image-to-pdf" className="text-slate-500 hover:text-slate-900 transition-colors">Image to PDF</Link></li>
-              <li><Link href="/tools/remove-background" className="text-slate-500 hover:text-slate-900 transition-colors">Background Remover</Link></li>
-            </ul>
-          </div>
-
-          {/* Column 3: Trust */}
-          <div className="space-y-6">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-900">Trust</h4>
-            <ul className="space-y-4 text-sm font-medium">
-              <li className="flex items-center gap-2 text-slate-500">
-                <ShieldCheck className="w-4 h-4 text-slate-900" />
-                Privacy Guaranteed
-              </li>
-              <li className="flex items-center gap-2 text-slate-500">
-                <Cpu className="w-4 h-4 text-slate-900" />
-                100% Client-Side
-              </li>
-              <li id="offline-indicator" className="flex items-center gap-2 text-slate-500">
-                <Globe className="w-4 h-4 text-green-600" />
-                Offline Ready
-              </li>
-            </ul>
-          </div>
+  const linkClass = "inline-flex min-h-11 items-center gap-1.5 text-[13px] text-slate-500 transition-colors hover:text-blue-700";
+  return <footer className="border-t border-slate-200/70 bg-white">
+    <div className="mx-auto max-w-6xl px-4 pt-10 pb-5">
+      <div className="grid gap-8 pb-7 md:grid-cols-[2fr_1fr_1fr] md:gap-12">
+        <div>
+          <Link href="/" aria-label="img0 home" className="inline-flex items-center gap-2"><span className="relative size-8 overflow-hidden rounded-lg border border-slate-200"><Image src="/insert-picture-icon.png" alt="" fill className="object-contain p-1.5" /></span><span className="text-lg font-bold tracking-tighter text-slate-900">img0</span></Link>
+          <p className="mt-3 max-w-xs text-[13px] leading-relaxed text-slate-500">A useful little toolkit for your images.<br />Free to use. Made for your browser.</p>
+          <p className="mt-3 flex items-center gap-1.5 text-xs text-emerald-800"><LockKeyhole className="size-3.5" aria-hidden="true" />Your images stay on your device.</p>
         </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 text-base text-slate-500 font-medium tracking-tight">
-          <div>
-            © {currentYear} IMG0.site 
-          </div>
-          <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-slate-200"></div>
-          <div>
-            Made by <Link href="https://x.com/saeedsaiyedtwt" target="_blank" className="text-slate-900 hover:text-blue-500 transition-colors underline decoration-slate-200 underline-offset-4 hover:decoration-blue-500">Saeed</Link>
-          </div>
-        </div>
+        <nav aria-label="Image tools" className="grid grid-cols-2 gap-6 md:col-span-2">
+          <div><h2 className="mb-1 text-[11px] font-semibold tracking-wide text-slate-800">THE TOOLKIT</h2><ul><li><Link href="/tools/compress-image" className={linkClass}>Compress images</Link></li><li><Link href="/tools/remove-background" className={linkClass}>Remove backgrounds</Link></li><li><Link href="/tools/image-to-pdf" className={linkClass}>Images to PDF</Link></li></ul></div>
+          <div><h2 className="mb-1 text-[11px] font-semibold tracking-wide text-slate-800">EXPLORE</h2><ul><li><Link href="/tools" className={linkClass}>All tools</Link></li><li><Link href="/privacy-policy" className={linkClass}>Privacy policy</Link></li><li><Link href="https://github.com/saeedsaiyed01/img0" target="_blank" rel="noreferrer" className={linkClass}>Source on GitHub <ArrowUpRight className="size-3" aria-hidden="true" /></Link></li></ul></div>
+        </nav>
       </div>
-    </footer>
-  );
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-4 text-[11px] text-slate-500"><p>© {new Date().getFullYear()} img0</p><p>Made by <Link href="https://x.com/saeedsaiyedtwt" target="_blank" rel="noreferrer" className="inline-flex min-h-9 items-center text-slate-700 underline decoration-slate-300 underline-offset-4">Saeed</Link></p></div>
+    </div>
+  </footer>;
 }

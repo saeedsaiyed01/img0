@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { removeBackground } from "@imgly/background-removal";
 import { saveAs } from "file-saver";
@@ -58,7 +59,7 @@ export function BackgroundRemovalTool() {
           }}
           title="Upload image to remove background"
           description="Supports PNG, JPG, and WebP"
-          className="h-[400px] bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200"
+          className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200 min-h-64 md:min-h-72"
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-300">
@@ -67,7 +68,7 @@ export function BackgroundRemovalTool() {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <span className="text-xs font-semibold text-slate-500 uppercase">Original</span>
-                    <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm aspect-square relative">
+                    <div className="rounded-2xl overflow-hidden border border-slate-300 bg-white shadow-sm aspect-square relative">
                         <img
                         src={URL.createObjectURL(originalFile)}
                         alt="Original"
@@ -112,15 +113,15 @@ export function BackgroundRemovalTool() {
 
           {/* Control Panel */}
           <div className="space-y-6">
-            <div className="space-y-2 sticky top-8">
+            <div className="space-y-2 lg:sticky lg:top-24">
                <span className="text-xs font-semibold text-slate-500 uppercase">Controls</span>
-               <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6">
+               <div className="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm space-y-6">
                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                      <h2 className="text-lg font-bold text-slate-900">Actions</h2>
                 </div>
 
-               <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
-                  <div className="flex flex-col gap-3 lg:space-y-3">
+               <ToolActionBar>
+                  <div className="flex flex-col gap-3">
                        <motion.button
                        whileTap={{ scale: 0.95 }}
                        onClick={handleDownload}
@@ -143,7 +144,7 @@ export function BackgroundRemovalTool() {
                        Reset / New Image
                        </motion.button>
                   </div>
-               </div>
+               </ToolActionBar>
 
                 <div className="p-4 bg-purple-50 border border-purple-100 rounded-xl text-xs text-purple-900 leading-relaxed">
                     <div className="flex items-center gap-2 font-bold mb-1 text-purple-800">

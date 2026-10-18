@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { saveAs } from "file-saver";
 import { Download, Image as ImageIcon, LayoutGrid, LayoutList, Loader2, Minus } from "lucide-react";
@@ -140,7 +141,7 @@ export function JoinImagesTool() {
         disablePreview={true}
         title="Upload images to join"
         description="Select multiple images to stitch together"
-        className="h-[250px] bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-200"
+        className="bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-200 min-h-64 md:min-h-72"
       />
 
       {files.length > 0 && (
@@ -159,8 +160,8 @@ export function JoinImagesTool() {
                 <div className="w-full flex gap-4 min-h-[300px]">
                      {/* Clean Placeholder when processing or waiting */}
                      <div className="flex-1 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 bg-white">
-                        <Loader2 className="size-8 animate-spin mb-3 text-blue-500" />
-                        <span className="font-medium">Synthesizing...</span>
+                        {files.length >= 2 && <Loader2 className="size-8 animate-spin mb-3 text-blue-500" />}
+                        <span className="font-medium">{files.length < 2 ? "Choose at least two images" : "Preparing preview?"}</span>
                      </div>
                 </div>
               )}
@@ -179,7 +180,7 @@ export function JoinImagesTool() {
 
           {/* Control Panel (Right Column - 33%) */}
           <div className="space-y-6">
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-8 sticky top-8">
+            <div className="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm space-y-8 lg:sticky lg:top-24">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                  <h4 className="font-bold text-slate-900 text-lg">Configuration</h4>
                   <motion.button 
@@ -196,6 +197,7 @@ export function JoinImagesTool() {
                 <div className="grid grid-cols-3 gap-3">
                   <motion.button
                     whileTap={{ scale: 0.95 }}
+                    aria-pressed={direction === "horizontal"}
                     onClick={() => setDirection("horizontal")}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
                       direction === "horizontal"
@@ -208,6 +210,7 @@ export function JoinImagesTool() {
                   </motion.button>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
+                    aria-pressed={direction === "vertical"}
                     onClick={() => setDirection("vertical")}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
                       direction === "vertical"
@@ -220,6 +223,7 @@ export function JoinImagesTool() {
                   </motion.button>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
+                    aria-pressed={direction === "grid"}
                     onClick={() => setDirection("grid")}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${
                       direction === "grid"
@@ -242,6 +246,7 @@ export function JoinImagesTool() {
                 </div>
                 <input
                   type="range"
+                  aria-label="Image spacing"
                   min="0"
                   max="100"
                   value={spacing}
@@ -256,6 +261,7 @@ export function JoinImagesTool() {
                   <div className="flex items-center gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50">
                     <input
                       type="color"
+                      aria-label="Background color"
                       value={backgroundColor}
                       onChange={(e) => setBackgroundColor(e.target.value)}
                       className="size-8 rounded-lg border border-slate-300 cursor-pointer p-0 bg-transparent"
@@ -267,7 +273,7 @@ export function JoinImagesTool() {
                 </div>
               )}
             
-            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+            <ToolActionBar>
                <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleDownload}
@@ -286,7 +292,7 @@ export function JoinImagesTool() {
                    </>
                 )}
               </motion.button>
-            </div>
+            </ToolActionBar>
 
             </div>
           </div>

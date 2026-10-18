@@ -65,7 +65,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <Toaster position="bottom-center" />
+          <Toaster position="top-center" offset={96} />
         </div>
         <Analytics />
       </body>

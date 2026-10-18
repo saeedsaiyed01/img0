@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { jsPDF } from "jspdf";
@@ -118,9 +119,10 @@ export default function PdfTool() {
         onFilesSelect={handleFilesSelect}
         multiple={true}
         disablePreview={true}
-        title="Add images to PDF"
-        description="Drag & drop multiple images here. They will be added to the list below."
-        className="h-[250px] bg-slate-50 border-slate-300"
+        compact={images.length > 0}
+        title={images.length ? "Add more pages" : "Add images to PDF"}
+        description={images.length ? "Drop more images here." : "Choose images in page order. You can reorder them below."}
+        className="bg-slate-50 border-slate-300 min-h-64 md:min-h-72"
       />
 
       {images.length > 0 && (
@@ -140,13 +142,13 @@ export default function PdfTool() {
             
             <div className="space-y-3">
               {images.map((img, index) => (
-                <div key={img.id} className="flex items-center gap-4 p-3 bg-white border border-slate-200 rounded-xl shadow-sm group hover:border-blue-300 transition-colors">
+                <div key={img.id} className="flex flex-wrap sm:flex-nowrap items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl shadow-sm group hover:border-blue-300 transition-colors">
                   <div className="size-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 border border-slate-100">
         
                     <img src={img.preview} alt="" className="size-full object-cover" />
                   </div>
                   
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1 basis-1/2 sm:basis-auto">
                     <p className="font-semibold text-sm text-slate-900 truncate">
                       {img.file.name}
                     </p>
@@ -155,28 +157,34 @@ export default function PdfTool() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1">
+                  <div className="ml-auto flex items-center gap-1">
                     <motion.button
                       whileTap={{ scale: 0.95 }}
+                      type="button"
+                      aria-label={`Move page ${index + 1} up`}
                       onClick={() => moveImage(index, "up")}
                       disabled={index === 0}
-                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-30"
+                      className="min-h-11 min-w-11 p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-30"
                     >
                       <ArrowUp className="size-4" />
                     </motion.button>
                     <motion.button
                       whileTap={{ scale: 0.95 }}
+                      type="button"
+                      aria-label={`Move page ${index + 1} down`}
                       onClick={() => moveImage(index, "down")}
                       disabled={index === images.length - 1}
-                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-30"
+                      className="min-h-11 min-w-11 p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-30"
                     >
                       <ArrowDown className="size-4" />
                     </motion.button>
                     <div className="w-px h-6 bg-slate-200 mx-1" />
                     <motion.button
                       whileTap={{ scale: 0.95 }}
+                      type="button"
+                      aria-label={`Remove page ${index + 1}`}
                       onClick={() => removeImage(img.id)}
-                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                      className="min-h-11 min-w-11 p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg"
                     >
                       <Trash2 className="size-4" />
                     </motion.button>
@@ -191,7 +199,7 @@ export default function PdfTool() {
              <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wide h-6 flex items-center">
                Configuration
              </h3>
-             <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-8">
+             <div className="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm space-y-6 lg:sticky lg:top-24">
               <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                 <div className="p-2 bg-blue-50 rounded-lg">
                   <FileText className="size-5 text-blue-600" />
@@ -207,6 +215,7 @@ export default function PdfTool() {
                   <div className="grid grid-cols-2 gap-2">
                     <motion.button
                       whileTap={{ scale: 0.95 }}
+                      aria-pressed={pageSize === "fit"}
                       onClick={() => setPageSize("fit")}
                       className={cn(
                         "px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all",
@@ -219,6 +228,7 @@ export default function PdfTool() {
                     </motion.button>
                     <motion.button
                       whileTap={{ scale: 0.95 }}
+                      aria-pressed={pageSize === "a4"}
                       onClick={() => setPageSize("a4")}
                       className={cn(
                         "px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all",
@@ -231,12 +241,12 @@ export default function PdfTool() {
                     </motion.button>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    "Fit Image" creates a page exactly the size of each image (no whitespace). "A4" centers images on standard pages.
+                    &quot;Fit Image&quot; creates a page exactly the size of each image (no whitespace). &quot;A4&quot; centers images on standard pages.
                   </p>
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+              <ToolActionBar>
                 <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={generatePDF}
@@ -250,7 +260,7 @@ export default function PdfTool() {
                     )}
                     <span>Download PDF</span>
                 </motion.button>
-              </div>
+              </ToolActionBar>
             </div>
           </div>
         </div>

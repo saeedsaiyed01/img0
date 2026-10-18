@@ -1,103 +1,49 @@
 "use client";
 
 import { ToolCard } from "@/components/ui/ToolCard";
-import { tools } from "@/config/tools";
-import { Search } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
+import { tools, ToolCategory } from "@/config/tools";
+import { Search, X } from "lucide-react";
+import { useRef, useState } from "react";
 
-const presenceAnimations = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.5, ease: "easeOut" }
-} as const;
+const filters: { value: ToolCategory | "all"; label: string }[] = [
+  { value: "all", label: "All tools" }, { value: "convert", label: "Convert" },
+  { value: "editor", label: "Edit & optimize" }, { value: "pdf", label: "PDF" },
+  { value: "generator", label: "Icons & presets" }, { value: "encode", label: "Developer" },
+];
 
 export default function ToolsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<ToolCategory | "all">("all");
+  const searchRef = useRef<HTMLInputElement>(null);
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean).map((word) => word === "img" ? "image" : word === "bg" ? "background" : word);
+  const filtered = tools.filter((tool) => {
+    const text = [tool.title, tool.description, tool.id.replaceAll("-", " "), tool.category, ...(tool.keywords || [])].join(" ").toLowerCase();
+    return (category === "all" || tool.category === category) && words.every((word) => text.includes(word));
+  });
 
-  const filteredTools = tools.filter((tool) =>
-    tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tool.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return (
-    <div className="max-w-6xl mx-auto pb-32 pt-16 px-4 space-y-16">
-      {/* Header */}
-      <motion.section 
-        {...presenceAnimations}
-        className="text-center space-y-8"
-      >
-        <div className="space-y-4">
-          <h1 className="text-5xl md:text-7xl font-medium tracking-[-0.05em] text-slate-900">
-           Image Tools
-          </h1>
-          <p className="max-w-2xl mx-auto text-xl text-slate-500 tracking-tight font-medium">
-            A unified collection of professional-grade, browser-based utilities. <br className="hidden md:block" />
-            Your image files stay on your device. No image uploads.
-          </p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="w-full md:max-w-md mx-auto relative group">
-          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <Search className="w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search tools..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-12 md:h-auto bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 placeholder:font-mono focus:outline-hidden focus:ring-2 focus:ring-slate-200 focus:bg-white transition-all"
-          />
-        </div>
-      </motion.section>
-
-      {/* Tools Grid / Empty State */}
-      {filteredTools.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTools.map((tool, index) => (
-            <motion.div
-              key={tool.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05, duration: 0.5 }}
-            >
-              <ToolCard
-                index={index}
-                id={tool.id}
-                title={tool.title}
-                description={tool.description}
-                href={tool.href}
-                category={tool.category}
-                icon={<tool.icon className="w-full h-full" />}
-              />
-            </motion.div>
-          ))}
-        </div>
-      ) : (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="py-20 text-center space-y-6"
-        >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 border border-slate-100 mb-4">
-            <Search className="w-10 h-10 text-slate-300" />
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold text-slate-900">No tools found</h3>
-            <p className="text-slate-500">We could not find any tool matching &quot;{searchQuery}&quot;</p>
-          </div>
-          <motion.button 
-            whileTap={{ scale: 0.95 }}
-            className="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:shadow-lg transition-all"
-          >
-            Request a Tool
-          </motion.button>
-        </motion.div>
-      )}
+  return <div className="mx-auto max-w-6xl space-y-8 px-4 pt-8 pb-20 md:pt-12">
+    <header className="space-y-3">
+      <h1 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-5xl">Image tools</h1>
+      <p className="max-w-2xl text-base text-slate-600 md:text-lg">Convert, edit, and optimize your images. Your files are processed on your device.</p>
+    </header>
+    <div className="space-y-4 rounded-2xl border border-slate-300 bg-white p-4 shadow-sm md:p-5">
+      <div className="relative max-w-xl">
+        <label htmlFor="tool-search" className="sr-only">Search image tools</label>
+        <Search className="pointer-events-none absolute left-4 top-3.5 size-5 text-slate-500" aria-hidden="true" />
+        <input ref={searchRef} id="tool-search" type="text" role="searchbox" inputMode="search" autoComplete="off" spellCheck={false} value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); setQuery(""); } }} placeholder="Search tools, e.g. compress or favicon" className="h-12 w-full rounded-xl border border-slate-300 bg-white pr-14 pl-12 text-slate-900 placeholder:text-slate-500" />
+        {query && <button type="button" aria-label="Clear search" onClick={() => { setQuery(""); searchRef.current?.focus(); }} className="absolute right-1 top-0.5 flex size-11 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100"><X className="size-4" aria-hidden="true" /></button>}
+      </div>
+      <div role="group" aria-label="Filter tools by category" className="flex flex-wrap gap-2">
+        {filters.map((filter) => <button key={filter.value} aria-pressed={category === filter.value} onClick={() => setCategory(filter.value)} className={`min-h-11 rounded-full border px-4 py-2 text-sm font-medium ${category === filter.value ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-slate-400"}`}>{filter.label}</button>)}
+      </div>
+      <p role="status" aria-live="polite" className="text-sm text-slate-600">{filtered.length} {filtered.length === 1 ? "tool" : "tools"}{query.trim() ? ` matching “${query.trim()}”` : " available"}</p>
     </div>
-  );
+    {filtered.length ? <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {filtered.map((tool, index) => <ToolCard key={tool.id} {...tool} index={index} icon={<tool.icon className="size-6" />} />)}
+    </div> : <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
+      <h2 className="text-xl font-semibold">No matching tools</h2>
+      <p className="mt-2 text-slate-600">Try another name or browse all tools.</p>
+      <button onClick={() => { setQuery(""); setCategory("all"); searchRef.current?.focus(); }} className="mt-5 min-h-11 rounded-xl bg-slate-900 px-6 py-3 font-semibold text-white">Clear search and filters</button>
+    </div>}
+  </div>;
 }

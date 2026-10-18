@@ -1,11 +1,13 @@
 "use client";
 
+import { ToolActionBar } from "@/components/ui/ToolActionBar";
 import { FileDropzone } from "@/components/ui/FileDropzone";
 import { cn } from "@/lib/utils";
 import { Download, Image as ImageIcon, Loader2, Move, RotateCcw, Type } from "lucide-react";
 import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { loadImage } from "@/lib/image-export";
 
 type WatermarkMode = "text" | "image";
 
@@ -37,16 +39,10 @@ export function WatermarkTool() {
   // Preview state
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const dragPointer = useRef<number | null>(null);
+  const renderVersion = useRef(0);
+  const [previewAspect, setPreviewAspect] = useState(4 / 3);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // Cleanup URLs on unmount
-  useEffect(() => {
-    return () => {
-      if (baseImageUrl) URL.revokeObjectURL(baseImageUrl);
-      if (watermarkImageUrl) URL.revokeObjectURL(watermarkImageUrl);
-    };
-  }, [baseImageUrl, watermarkImageUrl]);
 
   // Create base image URL
   useEffect(() => {
@@ -69,17 +65,15 @@ export function WatermarkTool() {
   const renderCanvas = useCallback(async () => {
     if (!baseImageUrl || !canvasRef.current) return;
 
+    const renderId = ++renderVersion.current;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Load base image
-    const baseImg = new Image();
-    baseImg.src = baseImageUrl;
-    
-    await new Promise<void>((resolve) => {
-      baseImg.onload = () => resolve();
-    });
+    const baseImg = await loadImage(baseImageUrl);
+    if (renderId !== renderVersion.current) return;
+    setPreviewAspect(baseImg.width / baseImg.height);
 
     canvas.width = baseImg.width;
     canvas.height = baseImg.height;
@@ -114,12 +108,8 @@ export function WatermarkTool() {
       
       ctx.fillText(text, 0, 0);
     } else if (watermarkMode === "image" && watermarkImageUrl) {
-      const wmImg = new Image();
-      wmImg.src = watermarkImageUrl;
-      
-      await new Promise<void>((resolve) => {
-        wmImg.onload = () => resolve();
-      });
+      const wmImg = await loadImage(watermarkImageUrl);
+      if (renderId !== renderVersion.current) return;
 
       const scaledWidth = (wmImg.width * scale) / 100;
       const scaledHeight = (wmImg.height * scale) / 100;
@@ -137,38 +127,47 @@ export function WatermarkTool() {
     ctx.restore();
   }, [baseImageUrl, watermarkMode, text, fontSize, fontColor, watermarkImageUrl, opacity, scale, rotation, position]);
 
+  const invalidatePreview = useCallback(() => { renderVersion.current++; }, []);
+
   // Re-render canvas when settings change
   useEffect(() => {
     if (baseImageUrl) {
-      renderCanvas();
+      renderCanvas().catch(() => toast.error("Could not open this image. Choose another file."));
     }
-  }, [renderCanvas, baseImageUrl]);
+    return invalidatePreview;
+  }, [renderCanvas, baseImageUrl, invalidatePreview]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    setIsDragging(true);
-    updatePosition(e);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !containerRef.current) return;
-    updatePosition(e);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const updatePosition = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
+  const updatePosition = (event: React.PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
     setPosition({
-      x: Math.max(0, Math.min(100, x)),
-      y: Math.max(0, Math.min(100, y)),
+      x: Math.max(0, Math.min(100, (event.clientX - rect.left) / rect.width * 100)),
+      y: Math.max(0, Math.min(100, (event.clientY - rect.top) / rect.height * 100)),
+    });
+  };
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    event.currentTarget.focus({ preventScroll: true });
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragPointer.current = event.pointerId;
+    updatePosition(event);
+  };
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragPointer.current === event.pointerId) updatePosition(event);
+  };
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    dragPointer.current = null;
+  };
+  const handlePositionKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const directions: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    const delta = directions[event.key];
+    if (!delta && event.key !== "Home") return;
+    event.preventDefault();
+    const step = event.shiftKey ? 10 : 1;
+    setPosition((current) => event.key === "Home" ? { x: 50, y: 50 } : {
+      x: Math.max(0, Math.min(100, current.x + delta[0] * step)),
+      y: Math.max(0, Math.min(100, current.y + delta[1] * step)),
     });
   };
 
@@ -220,7 +219,7 @@ export function WatermarkTool() {
           accept={{ "image/*": [".jpg", ".jpeg", ".png", ".webp"] }}
           title="Upload image to watermark"
           description="Then add text or image overlay"
-          className="h-80 bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-300"
+          className="bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-300 min-h-64 md:min-h-72"
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -228,11 +227,17 @@ export function WatermarkTool() {
           <div className="lg:col-span-2 space-y-4">
             <div 
               ref={containerRef}
-              className="relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIj48cmVjdCBmaWxsPSIjZjFmNWY5IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiLz48cmVjdCBmaWxsPSIjZjFmNWY5IiB4PSIxMCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNjaGVja2VyYm9hcmQpIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+')] border border-slate-200 rounded-2xl overflow-hidden shadow-sm cursor-crosshair"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              className="relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIj48cmVjdCBmaWxsPSIjZjFmNWY5IiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiLz48cmVjdCBmaWxsPSIjZjFmNWY5IiB4PSIxMCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNjaGVja2VyYm9hcmQpIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+')] border border-slate-200 rounded-2xl overflow-hidden shadow-sm cursor-crosshair mx-auto touch-none"
+              style={{ width: "100%", maxWidth: 500 * previewAspect, aspectRatio: previewAspect }}
+              role="group"
+              tabIndex={0}
+              aria-label="Watermark position"
+              aria-describedby="watermark-position-help"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onKeyDown={handlePositionKey}
             >
               <div className="absolute top-3 left-3 z-10 flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 text-white text-xs font-bold rounded-full backdrop-blur-sm">
                 <Move className="w-3.5 h-3.5" />
@@ -241,7 +246,7 @@ export function WatermarkTool() {
               
               <canvas
                 ref={canvasRef}
-                className="w-full h-auto max-h-[500px] object-contain"
+                className="block w-full h-full object-contain"
               />
               
               {/* Position indicator */}
@@ -255,6 +260,7 @@ export function WatermarkTool() {
               />
             </div>
 
+            <p id="watermark-position-help" className="text-xs leading-relaxed text-slate-600">Drag the preview or use arrow keys to position. Shift + arrow moves faster; Home centers. Position: {Math.round(position.x)}%, {Math.round(position.y)}%.</p>
             <button
               onClick={handleReset}
               className="w-full p-3 border-2 border-dashed border-slate-300 rounded-xl text-sm font-semibold text-slate-500 hover:border-slate-400 hover:text-slate-700 transition-colors"
@@ -266,9 +272,10 @@ export function WatermarkTool() {
           {/* Right: Settings Panel */}
           <div className="space-y-6">
             {/* Watermark Mode Toggle */}
-            <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <div className="p-4 bg-white border border-slate-300 rounded-2xl shadow-sm">
               <div className="grid grid-cols-2 gap-2">
                 <button
+                  aria-pressed={watermarkMode === "text"}
                   onClick={() => setWatermarkMode("text")}
                   className={cn(
                     "flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all",
@@ -281,6 +288,7 @@ export function WatermarkTool() {
                   Text
                 </button>
                 <button
+                  aria-pressed={watermarkMode === "image"}
                   onClick={() => setWatermarkMode("image")}
                   className={cn(
                     "flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all",
@@ -296,7 +304,7 @@ export function WatermarkTool() {
             </div>
 
             {/* Mode-specific Settings */}
-            <div className="p-6 border border-slate-200 bg-white shadow-sm rounded-2xl space-y-6">
+            <div className="p-6 border border-slate-300 bg-white shadow-sm rounded-2xl space-y-6">
               {watermarkMode === "text" ? (
                 <>
                   {/* Text Input */}
@@ -304,7 +312,7 @@ export function WatermarkTool() {
                     <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                       Watermark Text
                     </label>
-                    <input
+                    <input aria-label="Watermark text"
                       type="text"
                       value={text}
                       onChange={(e) => setText(e.target.value)}
@@ -319,7 +327,7 @@ export function WatermarkTool() {
                       <span>Font Size</span>
                       <span>{fontSize}px</span>
                     </div>
-                    <input
+                    <input aria-label="Font size"
                       type="range"
                       min="12"
                       max="200"
@@ -335,17 +343,17 @@ export function WatermarkTool() {
                       Text Color
                     </label>
                     <div className="flex items-center gap-3">
-                      <input
+                      <input aria-label="Text color"
                         type="color"
                         value={fontColor}
                         onChange={(e) => setFontColor(e.target.value)}
                         className="w-12 h-12 rounded-lg border border-slate-200 cursor-pointer"
                       />
-                      <input
+                      <input aria-label="Text color hex code"
                         type="text"
                         value={fontColor}
                         onChange={(e) => setFontColor(e.target.value)}
-                        className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm font-mono"
+                        className="min-w-0 flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm font-mono"
                       />
                     </div>
                   </div>
@@ -397,7 +405,7 @@ export function WatermarkTool() {
             </div>
 
             {/* Shared Controls */}
-            <div className="p-6 border border-slate-200 bg-white shadow-sm rounded-2xl space-y-6">
+            <div className="p-6 border border-slate-300 bg-white shadow-sm rounded-2xl space-y-6">
               <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
                 <div className="p-2 bg-blue-50 rounded-lg">
                   <RotateCcw className="w-5 h-5 text-blue-600" />
@@ -411,7 +419,7 @@ export function WatermarkTool() {
                   <span>Opacity</span>
                   <span>{opacity}%</span>
                 </div>
-                <input
+                <input aria-label="Watermark opacity"
                   type="range"
                   min="5"
                   max="100"
@@ -427,7 +435,7 @@ export function WatermarkTool() {
                   <span>Scale</span>
                   <span>{scale}%</span>
                 </div>
-                <input
+                <input aria-label="Watermark scale"
                   type="range"
                   min="10"
                   max="200"
@@ -443,7 +451,7 @@ export function WatermarkTool() {
                   <span>Rotation</span>
                   <span>{rotation}°</span>
                 </div>
-                <input
+                <input aria-label="Watermark rotation"
                   type="range"
                   min="-180"
                   max="180"
@@ -455,7 +463,7 @@ export function WatermarkTool() {
             </div>
 
             {/* Download Button */}
-            <div className="fixed bottom-0 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-50 lg:relative lg:p-0 lg:bg-transparent lg:border-t-0 lg:z-auto">
+            <ToolActionBar>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleDownload}
@@ -474,7 +482,7 @@ export function WatermarkTool() {
                 )}
                 {isProcessing ? "Processing..." : "Download Watermarked"}
               </motion.button>
-            </div>
+            </ToolActionBar>
           </div>
         </div>
       )}

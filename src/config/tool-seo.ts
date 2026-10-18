@@ -31,10 +31,10 @@ export const toolSeo: Record<string, ToolSeoContent> = {
     related: ['remove-background', 'image-to-webp', 'compress-image'],
   },
   'image-to-jpg': {
-    title: 'Image to JPG Converter — No Image Uploads',
-    description: 'Convert PNG, WebP, and browser-supported images to JPG locally. Preview the result and download a JPEG without uploading your image.',
-    overview: 'JPG is a practical format for photographs and email attachments. JPEG compression trades visual detail for file size. Transparent pixels are flattened onto a white background.',
-    steps: ['Choose the image you want to convert to JPG.', 'Review the resulting preview and file size.', 'Download the JPG while keeping your original as a backup.'],
+    title: 'Image to JPG Converter — Adjust Quality Online',
+    description: 'Convert PNG, WebP, and browser-supported images to JPG. Adjust JPEG quality and download the result with no image uploads.',
+    overview: 'JPG is a practical format for photographs and email attachments. The quality control trades visual detail for file size. Transparent pixels are flattened onto a white background.',
+    steps: ['Choose the image you want to convert to JPG.', 'Adjust quality and review the resulting preview and file size.', 'Download the JPG while keeping your original as a backup.'],
     faqs: [
       { question: 'Can JPG keep a transparent background?', answer: 'No. JPG does not support transparency. This converter fills transparent areas with white; use PNG or WebP to retain transparency.' },
       { question: 'Will JPG conversion always reduce file size?', answer: 'No. Output size depends on the original format, image content, and quality setting. Compare the output size before using the new file.' },
@@ -53,13 +53,13 @@ export const toolSeo: Record<string, ToolSeoContent> = {
     related: ['compress-image', 'image-to-png', 'image-to-jpg'],
   },
   'image-to-ico': {
-    title: 'Image to ICO — Browser Icon Export',
-    description: 'Prepare an image for an icon export in your browser. Review browser format limitations or create PNG favicon sizes for your website.',
-    overview: 'ICO is used for Windows icons and some website favicons. Browser canvas encoders do not universally support native ICO output. Verify the downloaded file format before using it in production.',
-    steps: ['Choose a simple image with a square composition.', 'Review the icon preview at a small size.', 'Download and verify the file format, or use the favicon generator for PNG icon sizes.'],
+    title: 'Image to ICO Converter — Free 256px Icon Export',
+    description: 'Convert a JPG, PNG, or WebP image into a 256-pixel ICO icon locally. Preview and download an icon file without uploading your image.',
+    overview: 'Create a 256 by 256 pixel icon in an ICO container with PNG image data. The image is scaled to fit the square, with transparent padding for non-square sources.',
+    steps: ['Choose a JPG, PNG, or WebP image with a clear, simple design.', 'Review the 256-pixel icon preview and any padding around the image.', 'Download the ICO file, or use the favicon generator when you need a package of website icon sizes.'],
     faqs: [
-      { question: 'Does changing a file extension create a native ICO file?', answer: 'No. A valid ICO file needs ICO encoding. Some browsers fall back to PNG when asked for an unsupported canvas format, so an .ico filename alone does not prove the encoding.' },
-      { question: 'Can I use a PNG as a website favicon?', answer: 'Many browsers support PNG favicons. The favicon generator creates multiple PNG sizes; use a dedicated ICO encoder when a native Windows ICO file is required.' },
+      { question: 'Does this just rename a PNG file?', answer: 'No. The tool wraps the PNG image data in an ICO directory and image entry. The downloaded file is an ICO container containing one 256-pixel image.' },
+      { question: 'Does the ICO contain multiple resolutions?', answer: 'No. This converter produces a single 256-pixel image. The favicon generator offers separate PNG sizes and a 32-pixel ICO icon for website use.' },
     ],
     related: ['favicon-generator', 'crop-image', 'image-to-png'],
   },
@@ -81,7 +81,7 @@ export const toolSeo: Record<string, ToolSeoContent> = {
     steps: ['Choose a square source image, ideally at least 512 by 512 pixels.', 'Generate the ZIP package containing PNG sizes and a manifest.', 'Extract the files, review the manifest values, and add the icons to your website.'],
     faqs: [
       { question: 'Which PNG sizes are included?', answer: 'The package includes 16×16, 32×32, 180×180, 192×192, and 512×512 PNG icons, along with a web manifest.' },
-      { question: 'Is the favicon.ico entry guaranteed to be native ICO?', answer: 'No. Its encoding depends on browser canvas support and may fall back to PNG. Verify it before use, or use the included PNG icons and a dedicated encoder when native ICO is required. Update the manifest values for your own website before publishing.' },
+      { question: 'What else is in the ZIP package?', answer: 'The package also contains a 32-pixel favicon.ico file and site.webmanifest. Update the manifest name, paths, and other settings for your own website before publishing it.' },
     ],
     related: ['crop-image', 'image-to-png', 'image-to-ico'],
   },
@@ -154,7 +154,7 @@ export const toolSeo: Record<string, ToolSeoContent> = {
   'compress-image': {
     title: 'Free Image Compressor — JPG, PNG & WebP',
     description: 'Compress JPG, PNG, and WebP images locally. Compare file sizes, adjust JPG or WebP quality, and download without image uploads.',
-    overview: 'Compare an image with a new browser-encoded version to find a useful balance between detail and file size. Quality affects JPG and WebP output; changing quality does not apply lossy compression to PNG.',
+    overview: 'Compare an image with a new browser-encoded version to find a useful balance between detail and file size. JPG and WebP offer quality controls; PNG output does not use a lossy quality slider.',
     steps: ['Choose a JPG, PNG, or WebP image.', 'Choose an output format and adjust quality when available. Compare the preview and file sizes.', 'Download the output if it meets your needs, or keep the original if it is smaller.'],
     faqs: [
       { question: 'Can I guarantee an output smaller than 100 KB?', answer: 'No. This tool offers format and quality controls, not a guaranteed target-size mode. Output depends on image dimensions and content; you may also need to crop or resize the source.' },

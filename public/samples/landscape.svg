@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#b9dce7"/><stop offset="1" stop-color="#f5e9cb"/></linearGradient>
+    <linearGradient id="lake" x2="0" y2="1"><stop stop-color="#80b9bd"/><stop offset="1" stop-color="#285e6c"/></linearGradient>
+    <linearGradient id="front" x2="0" y2="1"><stop stop-color="#285d60"/><stop offset="1" stop-color="#173d48"/></linearGradient>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1200v900H0z"/>
+  <circle cx="877" cy="222" r="99" fill="#fff3d1"/>
+  <path fill="#9eb8b4" d="m0 533 234-309 189 211 202-281 267 351 144-153 164 192v356H0z"/>
+  <path fill="#e0e3ce" d="m234 224-83 110 80-33 54 36zm391-70-78 109 73-32 61 35z"/>
+  <path fill="#698e88" d="m0 567 208-175 235 198 278-287 227 251 141-124 111 169v301H0z"/>
+  <path fill="url(#lake)" d="M0 596q310-84 584 18t616-1v287H0z"/>
+  <path fill="#c8d9c5" opacity=".5" d="m778 635 160-2-122 10 159 5-208 13 146 8-184 10z"/>
+  <path fill="url(#front)" d="M0 666q118-64 207-6t221 102l275 138H0zm1200-40q-107 57-185 44t-125 54l-67 66 377-28z"/>
+  <path fill="#183e45" d="m63 427-64 163h40l-53 123h180l-59-123h38zm1011 9-54 139h34l-45 106h154l-50-106h32z"/>
+  <path stroke="#183e45" stroke-width="14" d="M63 556v181m1010-193v154"/>
+  <path fill="#477d7a" d="M0 810q140-66 293 37l102 53H0z"/>
+</svg>
